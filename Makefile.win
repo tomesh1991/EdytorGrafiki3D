@@ -1,7 +1,7 @@
 # Project: Edytor
-# Compiler: Default VC2003 compiler
+# Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 19-01-13 14:39
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 19-01-13 16:48
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe
@@ -9,10 +9,10 @@ CC        = gcc.exe
 WINDRES   = "windres.exe"
 OBJ       = Objects/MingW/EdytorApp.o Objects/MingW/EdytorFrm.o Objects/MingW/Edytor_private.res
 LINKOBJ   = "Objects/MingW/EdytorApp.o" "Objects/MingW/EdytorFrm.o" Objects/MingW/Edytor_private.res
-LIBS      = -L"C:/Program Files (x86)/Dev-Cpp/lib/wx/gcc_lib" -L"C:/Program Files (x86)/Dev-Cpp/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -mwindows -l$(WXLIBNAME) -l$(WXLIBNAME)_gl -lwxscintilla -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -lopengl32  
-INCS      = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include"
-CXXINCS   = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/" -I"C:/Program Files (x86)/Dev-Cpp/include/common"
-RCINCS    = --include-dir "C:/PROGRA~2/Dev-Cpp/include/common"
+LIBS      = -L"D:/Program Files (x86)/Dev-Cpp/lib/wx/gcc_lib" -L"D:/Program Files (x86)/Dev-Cpp/lib" -L"D:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -mwindows -l$(WXLIBNAME) -l$(WXLIBNAME)_gl -lwxscintilla -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -lopengl32  
+INCS      = -I"D:/Program Files (x86)/Dev-Cpp/MinGW32/include"
+CXXINCS   = -I"D:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"D:/Program Files (x86)/Dev-Cpp/" -I"D:/Program Files (x86)/Dev-Cpp/include/common"
+RCINCS    = --include-dir "D:/PROGRA~1/Dev-Cpp/include/common"
 BIN       = Output/MingW/Edytor.exe
 DEFINES   = -D__WXMSW__ -D__GNUWIN32__ -D_UNICODE
 CXXFLAGS  = $(CXXINCS) $(DEFINES)  
