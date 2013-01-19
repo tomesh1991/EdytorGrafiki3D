@@ -14,9 +14,9 @@ class RGB{
         
     public:
         RGB(){
-            m_r = 255;
-            m_g = 255;
-            m_b = 255;
+            m_r = 0;
+            m_g = 0;
+            m_b = 0;
         }
         
         RGB(unsigned short r, unsigned short g, unsigned short b){
