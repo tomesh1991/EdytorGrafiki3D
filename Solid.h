@@ -34,13 +34,20 @@ class Solid {
 			return __size;
 		}
         
+        Vector** getVecArr() {
+            return __vecArr;    
+        }
+        
         virtual void draw(/* wxDC *dc */) = 0;
+        
+        virtual string toString() = 0;
+        virtual string toList() = 0;
     
     protected:        
         int __size;
         Vector** __vecArr;
-        RGB __col;
-        int __ID;    
+        int __ID; 
+        RGB __col;   
 };
 
 class Line : public Solid {
@@ -72,13 +79,23 @@ class Line : public Solid {
             __end = end;
         }
         
-        Vector** getVecArr() {
-            return __vecArr;    
-        }
-        
         void draw(/* wxDC *dc */){
 			//TO DO
         }
+        
+        string toString() {
+			stringstream strm;
+			strm << __ID << ": Line, begins at " << __start.toString() << ", and ends at " << __end.toString() << ".";
+			string tmp = strm.str();
+			return tmp;
+		}
+		
+		string toList() {
+			stringstream strm;
+			strm << __ID << " line " << __start.toString() << "," << __end.toString();
+			string tmp = strm.str();
+			return tmp;
+		}
         
     protected:
         Coord __start;
@@ -115,13 +132,24 @@ class Box : public Solid {
             __end = end;
         }
         
-        Vector** getVecArr() {
-            return __vecArr;    
-        }
-        
         void draw(/* wxDC *dc */){
 			//TO DO
 		}
+        
+        string toString() {
+			stringstream strm;
+			strm << __ID << ": Box, begins at " << __start.toString() << ", and ends at " << __end.toString() << ".";
+			string tmp = strm.str();
+			return tmp;
+		}
+		
+		string toList() {
+			stringstream strm;
+			strm << __ID << " box " << __start.toString() << "," << __end.toString();
+			string tmp = strm.str();
+			return tmp;
+		}
+		
         
     protected:
         Coord __start;
@@ -130,9 +158,12 @@ class Box : public Solid {
 
 class Sphere : public Solid {
     public:
-        Sphere(unsigned int id, RGB col, Coord center, unsigned int rad, unsigned int mer, unsigned int par) 
-			: Solid(id, col), __center(center), __radius(rad),
-				__meridian(mer), __parallel(par) {
+        Sphere(unsigned int id, RGB col, Coord center, double rad, int mer, int par) 
+			: Solid(id, col), __center(center), __radius(rad){
+			if(mer < 3) __meridian = 3;
+			else __meridian = mer;
+			if(par < 3) __parallel = 3;
+			else __parallel = par;
             __size = (2*__parallel +1)*__meridian;
             __vecArr = new Vector* [__size];
             for(int i=0;i<__size;++i) {
@@ -155,15 +186,15 @@ class Sphere : public Solid {
             __center = center;
         }
         
-        unsigned int getRadius() {
+        double getRadius() {
             return __radius;
         }
         
-        void setRadius(int radius) {
+        void setRadius(double radius) {
             __radius = radius;
         }
         
-        unsigned int getMeridian() {
+        int getMeridian() {
             return __meridian;
         }
         
@@ -171,7 +202,7 @@ class Sphere : public Solid {
             __meridian = meridian;
         }
         
-        unsigned int getParallel() {
+        int getParallel() {
             return __parallel;
         }
         
@@ -179,29 +210,40 @@ class Sphere : public Solid {
             __parallel = parallel;
         }
         
-        Vector** getVecArr() {
-            return __vecArr;    
-        }
-        
         void draw(/* wxDC *dc */){
 			//TO DO
 		}
         
+        string toString() {
+			stringstream strm;
+			strm << __ID << ": Sphere, center at " << __center.toString() << ", with radius " << __radius << ", rendered with " << __meridian << " meridians and " << __parallel << " parallels";
+			string tmp = strm.str();
+			return tmp;
+		}
+		
+		string toList() {
+			stringstream strm;
+			strm << __ID << " sphere " << __center.toString() << "," << __radius << "," << __meridian << "," << __parallel;
+			string tmp = strm.str();
+			return tmp;
+		}
+        
     protected:
         Coord __center;
-        unsigned int __radius;
-        unsigned int __meridian;
-        unsigned int __parallel;
+        double __radius;
+        int __meridian;
+        int __parallel;
 };
 
 class Cone : public Solid {
 	public:
-		Cone(unsigned int id, RGB& col, Coord& lowerCenter, unsigned int lowerRadius,
-										Coord& upperCenter, unsigned int upperRadius,
-										unsigned int surfaceDivision)
-			: Solid(id, col), __lowerRadixCenter(lowerCenter), __lowerRadixRadius(lowerRadius),
-	  						  __upperRadixCenter(upperCenter), __upperRadixRadius(upperRadius),
-	  						  __lateralSurfaceDivision(surfaceDivision) {
+		Cone(unsigned int id, RGB col, 	Coord lowerCenter, double lowerRadius,
+										Coord upperCenter, double upperRadius,
+										int surfaceDivision)
+			: Solid(id, col), __lowerRadixCenter(lowerCenter), __upperRadixCenter(upperCenter),
+							  __lowerRadixRadius(lowerRadius), __upperRadixRadius(upperRadius) {
+	  		if(surfaceDivision < 3) __lateralSurfaceDivision = 3;
+	  		else __lateralSurfaceDivision = surfaceDivision;
             __size = (3*__lateralSurfaceDivision);
             __vecArr = new Vector* [__size];
             for(int i=0;i<__size;++i) {
@@ -230,50 +272,61 @@ class Cone : public Solid {
 			__upperRadixCenter = center;
 		}
 		
-		unsigned int getLowerRadixRadius(){
+		double getLowerRadixRadius(){
 			return __lowerRadixRadius;
 		}
-		void setLowerRadixRadius(unsigned int radix){
+		void setLowerRadixRadius(double radix){
 			__lowerRadixRadius = radix;
 		}
 		
-		unsigned int getUpperRadixRadius(){
+		double getUpperRadixRadius(){
 			return __upperRadixRadius;
 		}
-		void setUpperRadixRadius(unsigned int radix){
+		void setUpperRadixRadius(double radix){
 			__upperRadixRadius = radix;
 		}
 		
-		unsigned int getLateralSurfaceDivision(){
+		int getLateralSurfaceDivision(){
 			return __lateralSurfaceDivision;
 		}
-		void setLateralSurfaceDivision(unsigned int div){
+		void setLateralSurfaceDivision(int div){
 			__lateralSurfaceDivision = div;
 		}
-        
-        Vector** getVecArr() {
-            return __vecArr;    
-        }
 		
 		void draw(/* wxDC *dc */){
 			//TO DO
 		}
 		
+		string toString() {
+			stringstream strm;
+			strm << __ID << ": Cone, first base at " << __lowerRadixCenter.toString() << ", with radius " << __lowerRadixRadius << ". Second base at " << __upperRadixCenter.toString() << ", with radius " << __upperRadixRadius << ". Rendered with " << __lateralSurfaceDivision << " quads.";
+			string tmp = strm.str();
+			return tmp;
+		}
+		
+		string toList() {
+			stringstream strm;
+			strm << __ID << " cone " << __lowerRadixCenter.toString() << "," << __lowerRadixRadius << "," << __upperRadixCenter.toString() << "," << __upperRadixRadius << "," << __lateralSurfaceDivision;
+			string tmp = strm.str();
+			return tmp;
+		}
+		
 	protected:
 		Coord __lowerRadixCenter;
 		Coord __upperRadixCenter;
-		unsigned int __lowerRadixRadius;
-		unsigned int __upperRadixRadius;
-		unsigned int __lateralSurfaceDivision;
+		double __lowerRadixRadius;
+		double __upperRadixRadius;
+		int __lateralSurfaceDivision;
 };
 
 class Cylinder : public Solid {
 	public:
-		Cylinder(unsigned int id, RGB& col, Coord& lowerCenter, Coord& upperCenter, 
-					unsigned int radius, unsigned int surfaceDivision)
+		Cylinder(unsigned int id, RGB col, Coord lowerCenter, Coord upperCenter, 
+					double radius, int surfaceDivision)
 			: Solid(id, col), __lowerRadixCenter(lowerCenter), __upperRadixCenter(upperCenter), 
-	  						  __radixRadius(radius),
-	  						  __lateralSurfaceDivision(surfaceDivision) {
+	  						  __radixRadius(radius) {
+			if(surfaceDivision < 3) __lateralSurfaceDivision = 3;
+	  		else __lateralSurfaceDivision = surfaceDivision;
             __size = (3*__lateralSurfaceDivision);
             __vecArr = new Vector* [__size];
             for(int i=0;i<__size;++i) {
@@ -302,33 +355,43 @@ class Cylinder : public Solid {
 			__upperRadixCenter = center;
 		}
 		
-		unsigned int getRadixRadius(){
+		double getRadixRadius(){
 			return __radixRadius;
 		}
-	  	void setRadixRadius(unsigned int radius){
+	  	void setRadixRadius(double radius){
 			__radixRadius = radius;
 		}
  		
-	  	unsigned int getLateralSurfaceDivision(){
+	  	int getLateralSurfaceDivision(){
 			return __lateralSurfaceDivision;
 		}
-		void setLateralSurfaceDivision(unsigned int div){
+		void setLateralSurfaceDivision(int div){
 			__lateralSurfaceDivision = div;
 		}
-        
-        Vector** getVecArr() {
-            return __vecArr;    
-        }
 		
 		void draw(/* wxDC *dc */){
 			//TO DO
 		}
 		
+		string toString() {
+			stringstream strm;
+			strm << __ID << ": Cylinder, first base at " << __lowerRadixCenter.toString() << ", second at " << __upperRadixCenter.toString() << ", with radius " << __radixRadius << ". Rendered with " << __lateralSurfaceDivision << " quads.";
+			string tmp = strm.str();
+			return tmp;
+		}
+		
+		string toList() {
+			stringstream strm;
+			strm << __ID << " cylinder " << __lowerRadixCenter.toString() << "," << __upperRadixCenter.toString() << "," << __radixRadius << "," << __lateralSurfaceDivision;
+			string tmp = strm.str();
+			return tmp;
+		}
+		
 	protected:
 		Coord __lowerRadixCenter;
 		Coord __upperRadixCenter;
-		unsigned int __radixRadius;
-		unsigned int __lateralSurfaceDivision;
+		double __radixRadius;
+		int __lateralSurfaceDivision;
 };
 
 #endif //_SOLID_
