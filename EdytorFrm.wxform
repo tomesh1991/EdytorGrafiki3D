@@ -260,6 +260,7 @@ object frmNewForm: TfrmNewForm
       AutoSize = False
       TabOrder = 1
       Text = 'WxEdit1'
+      EVT_TEXT_ENTER = 'WxEdit1Enter'
       Wx_BGColor = clBlack
       Wx_Class = 'wxTextCtrl'
       Wx_ControlOrientation = wxControlVertical

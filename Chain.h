@@ -4,8 +4,11 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cstdlib>
 #include <sstream>
-#include "String_Splitter.h"
+
+typedef std::vector<std::string>* PtrStrVec;
 
 using namespace std;
 
@@ -19,6 +22,34 @@ public:
     }
     void setnext(Link* next) {
         __next = next;
+    }
+    
+    PtrStrVec string_splitter(std::string str, std::string ref = " "){
+        /*  
+        inicjalizujemy pusty wektor wynikowy - nalezy pamietac o tym, ze jest on zlokalizowany na stercie systemowej 
+        wiec pamiec musi zostac potem zwolniona 
+        */
+        PtrStrVec result = new std::vector<std::string>();
+        unsigned int start = 0, end = 0;
+        
+        /* 
+        dla elegancji kodu wykorzystane zostaly metody klasy string ;)
+        wyszukujemy kolejne wystapienia lancucha referencyjnego i na podstawie otrzymanych wynikow
+        generujemy i stawiamy do wektora stringi z pojedynczymi wyrazami
+        */
+        end = str.find(ref, start);
+        while(end != std::string::npos){
+            result->push_back( str.substr(start, end-start) );
+            start = end+ref.length();
+            end = str.find(ref, start);
+        }
+        /*
+        jezeli string sklada sie z pojedynczego slowa - wstawiamy je,
+        jezeli z kilku, wrzucamy ostatni wyraz
+        */
+        result->push_back( str.substr(start, str.length()-start) );
+        
+        return result;
     }
     
     virtual double* solve() = 0;
@@ -349,7 +380,8 @@ public:
 
 class Chain{
 public:
-    Chain(PtrStrVec splitted_str){
+    Chain(string str){
+        splitted_str = string_splitter(str);
         __default = new Default(splitted_str);
         __cylinder = new Cylinder_link(__default,splitted_str);
         __cone = new Cone_link(__cylinder,splitted_str);
@@ -366,6 +398,38 @@ public:
         return __colour->solve();
     }
     
+    PtrStrVec getSplStr(){
+        return splitted_str;
+    }
+    
+    PtrStrVec string_splitter(std::string str, std::string ref = " "){
+        /*  
+        inicjalizujemy pusty wektor wynikowy - nalezy pamietac o tym, ze jest on zlokalizowany na stercie systemowej 
+        wiec pamiec musi zostac potem zwolniona 
+        */
+        PtrStrVec result = new std::vector<std::string>();
+        unsigned int start = 0, end = 0;
+        
+        /* 
+        dla elegancji kodu wykorzystane zostaly metody klasy string ;)
+        wyszukujemy kolejne wystapienia lancucha referencyjnego i na podstawie otrzymanych wynikow
+        generujemy i stawiamy do wektora stringi z pojedynczymi wyrazami
+        */
+        end = str.find(ref, start);
+        while(end != std::string::npos){
+            result->push_back( str.substr(start, end-start) );
+            start = end+ref.length();
+            end = str.find(ref, start);
+        }
+        /*
+        jezeli string sklada sie z pojedynczego slowa - wstawiamy je,
+        jezeli z kilku, wrzucamy ostatni wyraz
+        */
+        result->push_back( str.substr(start, str.length()-start) );
+        
+        return result;
+    }
+    
     ~Chain(){
 		delete __colour;
 		delete __delete;
@@ -377,9 +441,10 @@ public:
         delete __cone;
         delete __cylinder;
         delete __default;
+        delete splitted_str;
     };
 private:
-
+    PtrStrVec splitted_str;
 	Colour_link* __colour;
 	Delete_link* __delete;
 	Move_link* __move;

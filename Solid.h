@@ -11,14 +11,14 @@ using namespace std;
 
 class Solid {
     public:
-        Solid(unsigned int id, RGB& color) : __ID(id), __col(color){};
+        Solid(unsigned int id, RGBCol& color) : __ID(id), __col(color){};
         virtual ~Solid(){};
     
-        RGB& getcol() {
+        RGBCol& getcol() {
             return __col;
         }
     
-        void setcol(RGB& col) {
+        void setcol(RGBCol& col) {
             __col = col;
         }
     
@@ -47,12 +47,12 @@ class Solid {
         int __size;
         Vector** __vecArr;
         int __ID; 
-        RGB __col;   
+        RGBCol __col;   
 };
 
 class Line : public Solid {
     public:
-        Line(unsigned int id, RGB color, Coord start, Coord end) 
+        Line(unsigned int id, RGBCol color, Coord start, Coord end) 
             : Solid(id, color), __start(start), __end(end) {
             __size = 1;
             __vecArr = new Vector* [__size];
@@ -104,7 +104,7 @@ class Line : public Solid {
 
 class Box : public Solid {
     public:
-        Box(unsigned int id, RGB col, Coord start, Coord end) 
+        Box(unsigned int id, RGBCol col, Coord start, Coord end) 
 			: Solid(id, col), __start(start), __end(end) {
             __size = 12;
             __vecArr = new Vector* [__size];
@@ -158,7 +158,7 @@ class Box : public Solid {
 
 class Sphere : public Solid {
     public:
-        Sphere(unsigned int id, RGB col, Coord center, double rad, int mer, int par) 
+        Sphere(unsigned int id, RGBCol col, Coord center, double rad, int mer, int par) 
 			: Solid(id, col), __center(center), __radius(rad){
 			if(mer < 3) __meridian = 3;
 			else __meridian = mer;
@@ -223,7 +223,7 @@ class Sphere : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " sphere " << __center.toString() << "," << __radius << "," << __meridian << "," << __parallel;
+			strm << __ID << " sphere " << __center.toString() << "," << __radius;
 			string tmp = strm.str();
 			return tmp;
 		}
@@ -237,7 +237,7 @@ class Sphere : public Solid {
 
 class Cone : public Solid {
 	public:
-		Cone(unsigned int id, RGB col, 	Coord lowerCenter, double lowerRadius,
+		Cone(unsigned int id, RGBCol col, 	Coord lowerCenter, double lowerRadius,
 										Coord upperCenter, double upperRadius,
 										int surfaceDivision)
 			: Solid(id, col), __lowerRadixCenter(lowerCenter), __upperRadixCenter(upperCenter),
@@ -306,7 +306,7 @@ class Cone : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " cone " << __lowerRadixCenter.toString() << "," << __lowerRadixRadius << "," << __upperRadixCenter.toString() << "," << __upperRadixRadius << "," << __lateralSurfaceDivision;
+			strm << __ID << " cone " << __lowerRadixCenter.toString() << "," << __lowerRadixRadius << "," << __upperRadixCenter.toString() << "," << __upperRadixRadius;
 			string tmp = strm.str();
 			return tmp;
 		}
@@ -321,7 +321,7 @@ class Cone : public Solid {
 
 class Cylinder : public Solid {
 	public:
-		Cylinder(unsigned int id, RGB col, Coord lowerCenter, Coord upperCenter, 
+		Cylinder(unsigned int id, RGBCol col, Coord lowerCenter, Coord upperCenter, 
 					double radius, int surfaceDivision)
 			: Solid(id, col), __lowerRadixCenter(lowerCenter), __upperRadixCenter(upperCenter), 
 	  						  __radixRadius(radius) {
@@ -382,7 +382,7 @@ class Cylinder : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " cylinder " << __lowerRadixCenter.toString() << "," << __upperRadixCenter.toString() << "," << __radixRadius << "," << __lateralSurfaceDivision;
+			strm << __ID << " cylinder " << __lowerRadixCenter.toString() << "," << __upperRadixCenter.toString() << "," << __radixRadius;
 			string tmp = strm.str();
 			return tmp;
 		}

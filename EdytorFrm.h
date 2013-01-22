@@ -31,6 +31,8 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 ////Header Include End
+#include "Chain.h"
+#include "Factory.h"
 
 ////Dialog Style Start
 #undef EdytorFrm_STYLE
@@ -45,6 +47,7 @@ class EdytorFrm : public wxFrame
 	public:
 		EdytorFrm(wxWindow *parent, wxWindowID id = 1, const wxString &title = wxT("Edytor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = EdytorFrm_STYLE);
 		virtual ~EdytorFrm();
+		void WxEdit1Enter(wxCommandEvent& event);
 		
 	private:
 		//Do not add custom control declarations between
@@ -61,6 +64,16 @@ class EdytorFrm : public wxFrame
 		wxBoxSizer *WxBoxSizer2;
 		wxBoxSizer *WxBoxSizer1;
 		////GUI Control Declaration End
+		
+		Chain* ch;
+		Factory* fac;
+		RGBCol __col;
+		
+		Solid* SolArr[100];
+		bool access[100];
+		
+		int index;
+		unsigned int position;
 		
 	private:
 		//Note: if you receive any error with these enum IDs, then you need to
@@ -83,6 +96,11 @@ class EdytorFrm : public wxFrame
 	private:
 		void OnClose(wxCloseEvent& event);
 		void CreateGUIControls();
+		void MoveSolid(Solid*,double*);
+    	void RotateSolid(Solid*,double*);
+    	void rest(string);
+    	void SaveSolid(string);
+       	void LoadSolid(string);
 };
 
 #endif
