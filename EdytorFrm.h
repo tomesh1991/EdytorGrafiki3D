@@ -34,6 +34,7 @@
 #include "Chain.h"
 #include "Factory.h"
 
+
 ////Dialog Style Start
 #undef EdytorFrm_STYLE
 #define EdytorFrm_STYLE wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCLOSE_BOX
