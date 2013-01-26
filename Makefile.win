@@ -1,7 +1,7 @@
 # Project: Edytor
 # Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 26-01-13 14:23
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 26-01-13 15:26
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe

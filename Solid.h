@@ -41,6 +41,7 @@ class Solid {
         virtual void draw(/* wxDC *dc */) = 0;
         
         virtual void move(double*) = 0;
+        virtual void rotate(double*) = 0;
         
         virtual string toString() = 0;
         virtual string toList() = 0;
@@ -94,6 +95,8 @@ class Line : public Solid {
             __end.set_y(__end.get_y() + mvect[2]);
             __end.set_z(__end.get_z() + mvect[3]);
         }
+        
+        void rotate(double* par){}
         
         string toString() {
 			stringstream strm;
@@ -157,6 +160,8 @@ class Box : public Solid {
             __end.set_y(__end.get_y() + mvect[2]);
             __end.set_z(__end.get_z() + mvect[3]);
         }
+        
+        void rotate(double* par){}
         
         string toString() {
 			stringstream strm;
@@ -241,6 +246,8 @@ class Sphere : public Solid {
             __center.set_y(__center.get_y() + mvect[2]);
             __center.set_z(__center.get_z() + mvect[3]);
         }
+        
+        void rotate(double* par){}
         
         string toString() {
 			stringstream strm;
@@ -335,6 +342,8 @@ class Cone : public Solid {
             __upperRadixCenter.set_z(__upperRadixCenter.get_z() + mvect[3]);
         }
 		
+		void rotate(double* par){}
+		
 		string toString() {
 			stringstream strm;
 			strm << __ID << ": Cone, first base at " << __lowerRadixCenter.toString() << ", with radius " << __lowerRadixRadius << ". Second base at " << __upperRadixCenter.toString() << ", with radius " << __upperRadixRadius << ". Rendered with " << __lateralSurfaceDivision << " quads.";
@@ -420,6 +429,8 @@ class Cylinder : public Solid {
             __upperRadixCenter.set_y(__upperRadixCenter.get_y() + mvect[2]);
             __upperRadixCenter.set_z(__upperRadixCenter.get_z() + mvect[3]);
         }
+        
+        void rotate(double* par){}
 		
 		string toString() {
 			stringstream strm;

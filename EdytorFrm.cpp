@@ -115,7 +115,7 @@ void EdytorFrm::MoveSolid(Solid* sol, double* params) {
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
-    //PROSZE MI TO NAKURWIC BO JA JUZ NIE MOOOOOOOGE   
+    sol->rotate(params);
 }
 
 void EdytorFrm::SaveSolid(string file_name) {
@@ -159,19 +159,21 @@ void EdytorFrm::LoadSolid(string file_name) {
             v = string_splitter(str,","); //dzielimy przetworzonego stringa z komenda programu na poszczegolne skladowe
             
             if(v->at(1).compare("line")){
-                solid_id = 1;
-                id = strtod(v->at(0).c_str(),NULL);
+                solid_id = 1; //okreslamy typ zadanej bryly
+                id = strtod(v->at(0).c_str(),NULL);  //wyciagamy nr ID bryly
                 double param[7];
                 param[0] = solid_id;
                 
                 for(unsigned int i = 1; i < 7; ++i){
                     param[i] = strtod(v->at(i+1).c_str(),NULL);
                 }
-                
+                //tworzymy i wypelniamy wartosciami tablice zawierajaca parametry tworzonej bryly
                 SolArr[array_index] = fac->produce(id,__col,param);
                 access[array_index] = false;
+                //wstawiamy utworzona bryle w kontenerze i ustawiamy flage dostepnosci komorki na zajeta
                 (*s) << SolArr[array_index]->toList().c_str();
                 WxListBox1->InsertItems(1,s,0);
+                //uzupelniamy liste aktualnie wyswietlanych figur o aktualnie dodana
                 ++array_index;
                 
             }else if(v->at(1).compare("box")){
