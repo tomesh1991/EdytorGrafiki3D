@@ -69,7 +69,7 @@ void EdytorFrm::CreateGUIControls()
 	WxPanel1 = new wxPanel(this, ID_WXPANEL1, wxPoint(5, 5), wxSize(300, 300));
 	WxGridSizer1->Add(WxPanel1, 1, wxALIGN_CENTER | wxEXPAND | wxALL, 5);
 
-	WxPanel2 = new wxPanel(this, ID_WXPANEL2, wxPoint(315, 5), wxSize(300, 300));
+	WxPanel2 = new wxPanel(this, ID_WXPANEL2, wxPoint(482, 22), wxSize(300, 300));
 	WxGridSizer1->Add(WxPanel2, 1, wxALIGN_CENTER | wxEXPAND | wxALL, 5);
 
 	WxPanel3 = new wxPanel(this, ID_WXPANEL3, wxPoint(5, 315), wxSize(300, 300));
@@ -120,8 +120,10 @@ void EdytorFrm::RotateSolid(Solid* sol, double* params) {
 
 void EdytorFrm::SaveSolid(string file_name) {
     ofstream file(file_name.c_str()); //otwieramy plik
-    for(unsigned int i = 0; access[i]; ++i){ 
-        file << SolArr[i]->toString() << std::endl; //wstawiamy reprezentacje stringowa kazdego solida do pliku
+    int i = 0; //indeks
+    while(access[i] != true){
+        file << SolArr[i]->toList() << std::endl; //wstawiamy reprezentacje stringowa kazdego solida do pliku
+        ++i;
     }
     file.close(); //zamykamy plik
 }
@@ -138,87 +140,109 @@ void EdytorFrm::LoadSolid(string file_name) {
     }
     unsigned int array_index = 0; 
     //oczyszczamy tablicy solidow dla pewnosci
-    while(!file.eof()){
-        getline(file, str);
-        std::vector<string>* v;
-        int solid_id;
-        int id;
-        for(unsigned int i = 0; i < str.length(); ++i){
-            if(str[i] == '(' && str[i] ==')'){
-                str.erase(str.begin() + i); //oczyszczamy stringa z nawiasów
+    WxListBox1->Clear();
+    
+    if(file){
+        while(getline(file, str)){
+            int solid_id;
+            int id;
+            wxString *s = new wxString();
+            for(unsigned int i = 0; i < str.length(); ++i){
+                if(str[i] == '(' && str[i] ==')'){
+                    str.erase(str.begin() + i); //oczyszczamy stringa z nawiasów
+                }
+                if(str[i] == ' '){
+                    str[i] = ','; //zamieniamy spacje na przecinki (jednolity separator danych)
+                }
             }
-            if(str[i] == ' '){
-                str[i] = ','; //zamieniamy spacje na przecinki (jednolity separator danych)
+            v = string_splitter(str,","); //dzielimy przetworzonego stringa z komenda programu na poszczegolne skladowe
+            
+            if(v->at(1).compare("line")){
+                solid_id = 1;
+                id = strtod(v->at(0).c_str(),NULL);
+                double param[7];
+                param[0] = solid_id;
+                
+                for(unsigned int i = 1; i < 7; ++i){
+                    param[i] = strtod(v->at(i+1).c_str(),NULL);
+                }
+                
+                SolArr[array_index] = fac->produce(id,__col,param);
+                access[array_index] = false;
+                (*s) << SolArr[array_index]->toList().c_str();
+                WxListBox1->InsertItems(1,s,0);
+                ++array_index;
+                
+            }else if(v->at(1).compare("box")){
+                solid_id = 2;
+                id = strtod(v->at(0).c_str(),NULL);
+                double param[7];
+                param[0] = solid_id;
+                
+                for(unsigned int i = 1; i < 7; ++i){
+                    param[i] = strtod(v->at(i+1).c_str(),NULL);
+                }
+                
+                SolArr[array_index] = fac->produce(id,__col,param);
+                access[array_index] = false;
+                (*s) << SolArr[array_index]->toList().c_str();
+                WxListBox1->InsertItems(1,s,0);
+                ++array_index;
+                
+            }else if(v->at(1).compare("sphere")){
+                solid_id = 3;
+                id = strtod(v->at(0).c_str(),NULL);
+                double param[7];
+                param[0] = solid_id;
+                
+                for(unsigned int i = 1; i < 7; ++i){
+                    param[i] = strtod(v->at(i+1).c_str(),NULL);
+                }
+                
+                SolArr[array_index] = fac->produce(id,__col,param);
+                access[array_index] = false;
+                (*s) << SolArr[array_index]->toList().c_str();
+                WxListBox1->InsertItems(1,s,0);
+                ++array_index;
+                
+            }else if(v->at(1).compare("cone")){
+                solid_id = 4;
+                id = strtod(v->at(0).c_str(),NULL);
+                double param[9];
+                param[0] = solid_id;
+                
+                for(unsigned int i = 1; i < 9; ++i){
+                    param[i] = strtod(v->at(i+1).c_str(),NULL);
+                }
+                
+                SolArr[array_index] = fac->produce(id,__col,param);
+                access[array_index] = false;
+                (*s) << SolArr[array_index]->toList().c_str();
+                WxListBox1->InsertItems(1,s,0);
+                ++array_index;
+                
+            }else if(v->at(1).compare("cylinder")){
+                solid_id = 5;
+                id = strtod(v->at(0).c_str(),NULL);
+                double param[8];
+                param[0] = solid_id;
+                
+                for(unsigned int i = 1; i < 8; ++i){
+                    param[i] = strtod(v->at(i+1).c_str(),NULL);
+                }
+                
+                SolArr[array_index] = fac->produce(id,__col,param);
+                access[array_index] = false;
+                (*s) << SolArr[array_index]->toList().c_str();
+                WxListBox1->InsertItems(1,s,0);
+                ++array_index;
+            }else{
+                solid_id = 0;
             }
+            delete v; 
+            delete s;
         }
-        v = string_splitter(str,","); //dzielimy przetworzonego stringa z komenda programu na poszczegolne skladowe
-        
-        if(v->at(1).compare("line")){
-            solid_id = 1;
-            id = strtod(v->at(0).c_str(),NULL);
-            double *par = new double[7];
-            par[0] = solid_id;
-            for(unsigned int i = 1; i < 7; ++i){
-                par[i] = strtod(v->at(i+1).c_str(),NULL);
-            }
-            SolArr[array_index] = fac->produce(id,__col,par);
-            access[array_index] = false;
-            ++array_index;
-            delete par;
-        }else if(v->at(1).compare("box")){
-            solid_id = 2;
-            id = strtod(v->at(0).c_str(),NULL);
-            double *par = new double[7];
-            par[0] = solid_id;
-            for(unsigned int i = 1; i < 7; ++i){
-                par[i] = strtod(v->at(i+1).c_str(),NULL);
-            }
-            SolArr[array_index] = fac->produce(id,__col,par);
-            access[array_index] = false;
-            ++array_index;
-            delete par;
-        }else if(v->at(1).compare("sphere")){
-            solid_id = 3;
-            id = strtod(v->at(0).c_str(),NULL);
-            double *par = new double[7];
-            par[0] = solid_id;
-            for(unsigned int i = 1; i < 7; ++i){
-                par[i] = strtod(v->at(i+1).c_str(),NULL);
-            }
-            SolArr[array_index] = fac->produce(id,__col,par);
-            access[array_index] = false;
-            ++array_index;
-            delete par;
-        }else if(v->at(1).compare("cone")){
-            solid_id = 4;
-            id = strtod(v->at(0).c_str(),NULL);
-            double *par = new double[10];
-            par[0] = solid_id;
-            for(unsigned int i = 1; i < 10; ++i){
-                par[i] = strtod(v->at(i+1).c_str(),NULL);
-            }
-            SolArr[array_index] = fac->produce(id,__col,par);
-            access[array_index] = false;
-            ++array_index;
-            delete par;
-        }else if(v->at(1).compare("cylinder")){
-            solid_id = 5;
-            id = strtod(v->at(0).c_str(),NULL);
-            double *par = new double[9];
-            par[0] = solid_id;
-            for(unsigned int i = 1; i < 9; ++i){
-                par[i] = strtod(v->at(i+1).c_str(),NULL);
-            }
-            SolArr[array_index] = fac->produce(id,__col,par);
-            access[array_index] = false;
-            ++array_index;
-            delete par;
-        }else{
-            solid_id = 0;
-        }
-        
-        delete v;
-    }// parsowanie zawartosci pliku
+    }
     file.close(); //zamykamy plik
 }
 
