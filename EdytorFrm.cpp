@@ -111,7 +111,7 @@ void EdytorFrm::OnClose(wxCloseEvent& event)
 }
 
 void EdytorFrm::MoveSolid(Solid* sol, double* params) {
-    //PROSZE MI TO NAKURWIC BO JA JUZ NIE MOOOOOOOGE   
+    sol->move(params);
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
@@ -120,11 +120,12 @@ void EdytorFrm::RotateSolid(Solid* sol, double* params) {
 
 void EdytorFrm::SaveSolid(string file_name) {
     ofstream file(file_name.c_str()); //otwieramy plik
-    int i = 0; //indeks
-    while(access[i] != true){
-        file << SolArr[i]->toList() << std::endl; //wstawiamy reprezentacje stringowa kazdego solida do pliku
-        ++i;
-    }
+    for(unsigned int i = 0; i < 100; ++i){
+        if(access[i] != true){
+            file << SolArr[i]->toList() << std::endl; //wstawiamy reprezentacje stringowa kazdego solida do pliku
+            ++i;
+        }
+    }//utworzony plik jest de facto skryptem z poleceniami programu, ktore zostana zinterpretowane podczas jego wczytywania 
     file.close(); //zamykamy plik
 }
 
@@ -241,7 +242,7 @@ void EdytorFrm::LoadSolid(string file_name) {
             }
             delete v; 
             delete s;
-        }
+        }//interpreter polecen zapisanych w pliku
     }
     file.close(); //zamykamy plik
 }

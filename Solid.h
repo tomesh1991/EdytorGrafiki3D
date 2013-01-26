@@ -40,6 +40,8 @@ class Solid {
         
         virtual void draw(/* wxDC *dc */) = 0;
         
+        virtual void move(double*) = 0;
+        
         virtual string toString() = 0;
         virtual string toList() = 0;
     
@@ -81,6 +83,16 @@ class Line : public Solid {
         
         void draw(/* wxDC *dc */){
 			//TO DO
+        }
+        
+        void move(double* mvect){
+            __start.set_x(__start.get_x() + mvect[1]);
+            __start.set_y(__start.get_y() + mvect[2]);
+            __start.set_z(__start.get_z() + mvect[3]);
+            
+            __end.set_x(__end.get_x() + mvect[1]);
+            __end.set_y(__end.get_y() + mvect[2]);
+            __end.set_z(__end.get_z() + mvect[3]);
         }
         
         string toString() {
@@ -135,6 +147,16 @@ class Box : public Solid {
         void draw(/* wxDC *dc */){
 			//TO DO
 		}
+		
+		void move(double* mvect){
+            __start.set_x(__start.get_x() + mvect[1]);
+            __start.set_y(__start.get_y() + mvect[2]);
+            __start.set_z(__start.get_z() + mvect[3]);
+            
+            __end.set_x(__end.get_x() + mvect[1]);
+            __end.set_y(__end.get_y() + mvect[2]);
+            __end.set_z(__end.get_z() + mvect[3]);
+        }
         
         string toString() {
 			stringstream strm;
@@ -213,6 +235,12 @@ class Sphere : public Solid {
         void draw(/* wxDC *dc */){
 			//TO DO
 		}
+		
+		void move(double* mvect){
+            __center.set_x(__center.get_x() + mvect[1]);
+            __center.set_y(__center.get_y() + mvect[2]);
+            __center.set_z(__center.get_z() + mvect[3]);
+        }
         
         string toString() {
 			stringstream strm;
@@ -297,6 +325,16 @@ class Cone : public Solid {
 			//TO DO
 		}
 		
+		void move(double* mvect){
+            __lowerRadixCenter.set_x(__lowerRadixCenter.get_x() + mvect[1]);
+            __lowerRadixCenter.set_y(__lowerRadixCenter.get_y() + mvect[2]);
+            __lowerRadixCenter.set_z(__lowerRadixCenter.get_z() + mvect[3]);
+            
+            __upperRadixCenter.set_x(__upperRadixCenter.get_x() + mvect[1]);
+            __upperRadixCenter.set_y(__upperRadixCenter.get_y() + mvect[2]);
+            __upperRadixCenter.set_z(__upperRadixCenter.get_z() + mvect[3]);
+        }
+		
 		string toString() {
 			stringstream strm;
 			strm << __ID << ": Cone, first base at " << __lowerRadixCenter.toString() << ", with radius " << __lowerRadixRadius << ". Second base at " << __upperRadixCenter.toString() << ", with radius " << __upperRadixRadius << ". Rendered with " << __lateralSurfaceDivision << " quads.";
@@ -372,6 +410,16 @@ class Cylinder : public Solid {
 		void draw(/* wxDC *dc */){
 			//TO DO
 		}
+		
+		void move(double* mvect){
+            __lowerRadixCenter.set_x(__lowerRadixCenter.get_x() + mvect[1]);
+            __lowerRadixCenter.set_y(__lowerRadixCenter.get_y() + mvect[2]);
+            __lowerRadixCenter.set_z(__lowerRadixCenter.get_z() + mvect[3]);
+            
+            __upperRadixCenter.set_x(__upperRadixCenter.get_x() + mvect[1]);
+            __upperRadixCenter.set_y(__upperRadixCenter.get_y() + mvect[2]);
+            __upperRadixCenter.set_z(__upperRadixCenter.get_z() + mvect[3]);
+        }
 		
 		string toString() {
 			stringstream strm;
