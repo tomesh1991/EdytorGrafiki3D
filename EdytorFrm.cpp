@@ -378,7 +378,6 @@ void EdytorFrm::Repaint() {
  
  int w1, h1, w2, h2, w3, h3, w4, h4;
  int _w1, _h1, _w2, _h2, _w3, _h3, _w4, _h4;
- //double x0, y0, x1, y1;
  int r, g, b;
  
  WxPanel1->GetSize(&w1,&h1);
@@ -396,8 +395,6 @@ void EdytorFrm::Repaint() {
  _w3=w3/2.; _h3=h3/2.;
  _w4=w4/2.; _h4=h4/2.;
  
- 
- 
  bdc1.SetBackground(wxBrush(RGB(255,255,255)));
  bdc1.Clear(); 
  bdc2.SetBackground(wxBrush(RGB(255,255,255)));
@@ -409,14 +406,13 @@ void EdytorFrm::Repaint() {
  
  Vector* cvVector;
 //*****************szel¹gowe macierze***********************************8
-
   double x0,x1,x2,y0,y1,y2,z1,z2;
   for(int i = 0;i<=3;i++)
     for(int j = 0;j<=3;j++)
         macierz.data[i][j]=0;
         
-    macierz.data[0][0]=(1.0*w1/2)/100;
-    macierz.data[1][1]=(1.0*h1/2)/100;
+    macierz.data[0][0]=(1.0*_w1)/100;
+    macierz.data[1][1]=(1.0*_h1)/100;
     macierz.data[2][2]=1.0;
    
 /// Rotacja X
@@ -458,20 +454,22 @@ void EdytorFrm::Repaint() {
 //***************************************************
  bdc1.SetDeviceOrigin(_w1, _h1);
  
- for(int i = 0; !access[i] ;i++){
+ for(int i = 0; i < 100 ;i++){
+   if(!access[i])     
     for(int j = 0; j < SolArr[i]->getSize();j++){
         cvVector = SolArr[i]->getSingleVec(j);
         Coord cvBegin = cvVector->getBegin();
         Coord cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
         macierz*cvEnd;
-        cvVector->setBegin(cvBegin);
-        cvVector->setEnd(cvEnd);
+        Vector* cvVector2 = new Vector();
+        cvVector2->setBegin(cvBegin);
+        cvVector2->setEnd(cvEnd);
         
-        x0 = ((cvVector->getBegin().get_x()+x)/z)-50; 
-        y0 = (-cvVector->getBegin().get_y()-y)/z;
-        x1 = ((cvVector->getEnd().get_x()+x)/z)-50;
-        y1 = (-cvVector->getEnd().get_y()-y)/z;
+        x0 = ((cvVector2->getBegin().get_x()+x)/z)-50; 
+        y0 = ((-cvVector2->getBegin().get_y()-y)/z)+50;
+        x1 = ((cvVector2->getEnd().get_x()+x)/z)-50;
+        y1 = ((-cvVector2->getEnd().get_y()-y)/z)+50;
         
         r = cvVector->getColour().get_r();
         g = cvVector->getColour().get_g();
@@ -479,6 +477,7 @@ void EdytorFrm::Repaint() {
         
         bdc1.SetPen(wxPen(RGB(r,g,b)));
         bdc1.DrawLine(x0,y0,x1,y1);
+        delete cvVector2;
     }           
  }
 }
