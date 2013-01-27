@@ -21,6 +21,15 @@
 
 double d=-2.0;
 
+Matrix macierz;
+Matrix macierzRotacjaX;
+Matrix macierzRotacjaY;
+Matrix macierzRotacjaZ;
+Matrix macierzSkalowanie;
+Matrix macierzTranslacjaX;
+Matrix macierzTranslacjaY;
+Matrix macierzTranslacjaZ;
+
 //Do not add custom headers between
 //Header Include Start and Header Include End
 //wxDev-C++ designer will remove them
@@ -367,27 +376,26 @@ void EdytorFrm::Repaint() {
  wxClientDC dc3(WxPanel3);
  wxClientDC dc4(WxPanel4);
  
- wxBufferedDC bdc1(&dc1);
- wxBufferedDC bdc2(&dc2);
- wxBufferedDC bdc3(&dc3);
- wxBufferedDC bdc4(&dc4);
- 
  int w1, h1, w2, h2, w3, h3, w4, h4;
  int _w1, _h1, _w2, _h2, _w3, _h3, _w4, _h4;
- double x0, y0, x1, y1;
+ //double x0, y0, x1, y1;
  int r, g, b;
  
  WxPanel1->GetSize(&w1,&h1);
  WxPanel2->GetSize(&w2,&h2);
  WxPanel3->GetSize(&w3,&h3);
  WxPanel4->GetSize(&w4,&h4);
+  
+ wxBufferedDC bdc1(&dc1, wxSize(w1,h1));
+ wxBufferedDC bdc2(&dc2, wxSize(w2,h2));
+ wxBufferedDC bdc3(&dc3, wxSize(w3,h3));
+ wxBufferedDC bdc4(&dc4, wxSize(w4,h4));
  
  _w1=w1/2.; _h1=h1/2.;
  _w2=w2/2.; _h2=h2/2.;
  _w3=w3/2.; _h3=h3/2.;
  _w4=w4/2.; _h4=h4/2.;
  
- bdc1.SetDeviceOrigin(_w1, _h1);
  
  
  bdc1.SetBackground(wxBrush(RGB(255,255,255)));
@@ -399,44 +407,71 @@ void EdytorFrm::Repaint() {
  bdc4.SetBackground(wxBrush(RGB(255,255,255)));
  bdc4.Clear();
  
-
- Matrix ox = fac->RotateX(0);
- Matrix oy = fac->RotateY(0);
- Matrix oz = fac->RotateZ(0);
- Matrix rotacja = ox*oy*oz;
- 
- Matrix rzut;
- rzut.data[3][2]=1.0/d;
- 
- Matrix skalowanie; 
- skalowanie.data[0][0]=(99+1.0)/100.0;
- skalowanie.data[1][1]=(99+1.0)/100.0;
- skalowanie.data[2][2]=(99+1.0)/100.0;
- 
-Matrix translacja;
-translacja.data[0][3]=(50-50)/20.0; 
-translacja.data[1][3]=(50-50)/20.0;
-translacja.data[2][3]=(50-50)/20.0;
- 
- Matrix matrix;
- matrix = translacja*rotacja*skalowanie*rzut;
- 
  Vector* cvVector;
+//*****************szel¹gowe macierze***********************************8
 
+  double x0,x1,x2,y0,y1,y2,z1,z2;
+  for(int i = 0;i<=3;i++)
+    for(int j = 0;j<=3;j++)
+        macierz.data[i][j]=0;
+        
+    macierz.data[0][0]=(1.0*w1/2)/100;
+    macierz.data[1][1]=(1.0*h1/2)/100;
+    macierz.data[2][2]=1.0;
+   
+/// Rotacja X
+       
+    macierzRotacjaX.data[0][0]=1.0;
+    macierzRotacjaX.data[1][2]=sin((0*2*3.14)/360);
+    macierzRotacjaX.data[2][1]=-sin((0*2*3.14)/360);  
+    macierzRotacjaX.data[1][1]=1.0*cos((0*2*3.14)/360);
+    macierzRotacjaX.data[2][2]=1.0*cos((0*2*3.14)/360);    
+/// Rotacja Y 
+    macierzRotacjaY.data[1][1]=1.0;
+    macierzRotacjaY.data[0][2]=-sin((0*2*3.14)/360);
+    macierzRotacjaY.data[2][0]=sin((0*2*3.14)/360);  
+    macierzRotacjaY.data[0][0]=1.0*cos((0*2*3.14)/360);
+    macierzRotacjaY.data[2][2]=1.0*cos((0*2*3.14)/360); 
+    
+/// Rotacja Z
+    macierzRotacjaZ.data[0][0]=1.0*cos((0*2*3.14)/360);
+    macierzRotacjaZ.data[0][1]=sin((0*2*3.14)/360);
+    macierzRotacjaZ.data[1][0]=-sin((0*2*3.14)/360);  
+    macierzRotacjaZ.data[1][1]=1.0*cos((0*2*3.14)/360);
+    macierzRotacjaZ.data[2][2]=1.0;
+/// Skalowanie
+    
+    macierzSkalowanie.data[0][0]=1*99;
+    macierzSkalowanie.data[1][1]=1*99;
+    macierzSkalowanie.data[2][2]=1*99;
+    
+    /// Translacja
+    macierzTranslacjaX.data[0][0]=1.0;
+    macierzTranslacjaX.data[1][1]=1.0;
+    macierzTranslacjaX.data[2][2]=1.0;
+    
+    double x = macierzTranslacjaX.data[3][0]=1.0*50;
+    double y = macierzTranslacjaX.data[3][1]=1.0*50;
+    double z = macierzTranslacjaX.data[3][2]=-(1.0*50-120)/60;         
+
+    macierz=macierz*macierzTranslacjaX*macierzRotacjaX*macierzRotacjaY*macierzRotacjaZ*macierzSkalowanie;  
+//***************************************************
+ bdc1.SetDeviceOrigin(_w1, _h1);
+ 
  for(int i = 0; !access[i] ;i++){
     for(int j = 0; j < SolArr[i]->getSize();j++){
         cvVector = SolArr[i]->getSingleVec(j);
-      /*  Coord cvBegin = cvVector->getBegin();
-        Coord cvEnd = cvVector->getEnd();
-        matrix*cvBegin;
-        matrix*cvEnd;
+        Coord cvBegin = cvVector->getBegin();
+        Coord cvEnd = cvVector->getEnd(); 
+        macierz*cvBegin;
+        macierz*cvEnd;
         cvVector->setBegin(cvBegin);
-        cvVector->setEnd(cvEnd);*/
+        cvVector->setEnd(cvEnd);
         
-        x0=(cvVector->getBegin().get_x()*d/(cvVector->getBegin().get_z()+d))*w1/2.5;
-        y0=(cvVector->getBegin().get_y()*d/(cvVector->getBegin().get_z()+d))*h1/2.5;
-        x1=(cvVector->getEnd().get_x()*d/(cvVector->getEnd().get_z()+d))*w1/2.5;
-        y1=(cvVector->getEnd().get_y()*d/(cvVector->getEnd().get_z()+d))*h1/2.5;
+        x0 = ((cvVector->getBegin().get_x()+x)/z)-50; 
+        y0 = (-cvVector->getBegin().get_y()-y)/z;
+        x1 = ((cvVector->getEnd().get_x()+x)/z)-50;
+        y1 = (-cvVector->getEnd().get_y()-y)/z;
         
         r = cvVector->getColour().get_r();
         g = cvVector->getColour().get_g();
@@ -446,27 +481,6 @@ translacja.data[2][3]=(50-50)/20.0;
         bdc1.DrawLine(x0,y0,x1,y1);
     }           
  }
-//  if(!access[0])
-//    dynamic_cast<Cylinder*>(SolArr[0])->toFile();
-
- 
-// bdc1.SetPen(wxPen(RGB(0,0,0)));
-// bdc1.DrawLine(x0,y0,x1,y1);
-    
-/*    for(){
-        v1.Set(*xs,*ys,*zs);
-        v2.Set(*xe,*ye,*ze);
-        
-        v1=matrix*v1;
-        v2=matrix*v2;
-        double x0=(v1.GetX()*d/(v1.data[2]+d))*w/2.5 + w2;
-        double y0=(v1.GetY()*d/(v1.data[2]+d))*h/2.5 + h2;
-        double x1=(v2.GetX()*d/(v2.data[2]+d))*w/2.5 + w2;
-        double y1=(v2.GetY()*d/(v2.data[2]+d))*h/2.5 + h2;
-        bdc.SetPen(wxPen(RGB(*rI,*gI,*bI)));
-        bdc.DrawLine(x0,y0,x1,y1);
-        //bdc.DrawLine(v1.GetX()/v1.data[3],v1.GetY()/v1.data[3],v2.GetX()/v2.data[3],v2.GetY()/v2.data[3]);
-    }*/
 }
 
 void EdytorFrm::WxPanelUpdateUI(wxUpdateUIEvent& event){
