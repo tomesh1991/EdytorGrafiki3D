@@ -453,6 +453,9 @@ void EdytorFrm::Repaint() {
     macierz=macierz*macierzTranslacjaX*macierzRotacjaX*macierzRotacjaY*macierzRotacjaZ*macierzSkalowanie;  
 //***************************************************
  bdc1.SetDeviceOrigin(_w1, _h1);
+ bdc2.SetDeviceOrigin(_w2, _h2);
+ bdc3.SetDeviceOrigin(_w3, _h3);
+ bdc4.SetDeviceOrigin(_w4, _h4);
  
  for(int i = 0; i < 100 ;i++){
    if(!access[i])     
@@ -477,6 +480,18 @@ void EdytorFrm::Repaint() {
         
         bdc1.SetPen(wxPen(RGB(r,g,b)));
         bdc1.DrawLine(x0,y0,x1,y1);
+        
+                
+        bdc2.SetPen(wxPen(RGB(r,g,b)));
+        bdc2.DrawLine(x0,y0,x1,y1);
+        
+                
+        bdc3.SetPen(wxPen(RGB(r,g,b)));
+        bdc3.DrawLine(x0,y0,x1,y1);
+        
+                
+        bdc4.SetPen(wxPen(RGB(r,g,b)));
+        bdc4.DrawLine(x0,y0,x1,y1);
         delete cvVector2;
     }           
  }
