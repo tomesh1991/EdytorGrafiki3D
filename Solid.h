@@ -26,7 +26,7 @@ class Solid {
             return __ID;
         }
         
-        void setID(int ID) {
+        void setID(unsigned int ID) {
         	__ID = ID;
         }
         
@@ -49,7 +49,7 @@ class Solid {
     protected:        
         int __size;
         Vector** __vecArr;
-        int __ID; 
+        unsigned int __ID; 
         RGBCol __col;   
 };
 
