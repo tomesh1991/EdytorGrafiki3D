@@ -16,6 +16,10 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <wx/dcclient.h>
+#include <wx/dcbuffer.h>
+
+double d=-2.0;
 
 //Do not add custom headers between
 //Header Include Start and Header Include End
@@ -34,7 +38,11 @@ BEGIN_EVENT_TABLE(EdytorFrm,wxFrame)
 	////Manual Code End
 	
 	EVT_CLOSE(EdytorFrm::OnClose)
-	EVT_TEXT_ENTER(ID_WXEDIT1,EdytorFrm::WxEdit1Enter)
+	
+    EVT_TEXT_ENTER(ID_WXEDIT1,EdytorFrm::WxEdit1Enter)
+	
+	EVT_UPDATE_UI(ID_WXPANEL,EdytorFrm::WxPanelUpdateUI)
+
 END_EVENT_TABLE()
 ////Event Table End
 
@@ -350,4 +358,117 @@ void EdytorFrm::WxEdit1Enter(wxCommandEvent& event)
 	delete ch;
 	WxEdit1->Clear();
 	WxEdit1->SetFocus();
+	Repaint();
+}
+
+void EdytorFrm::Repaint() {
+ wxClientDC dc1(WxPanel1);
+ wxClientDC dc2(WxPanel2);
+ wxClientDC dc3(WxPanel3);
+ wxClientDC dc4(WxPanel4);
+ 
+ wxBufferedDC bdc1(&dc1);
+ wxBufferedDC bdc2(&dc2);
+ wxBufferedDC bdc3(&dc3);
+ wxBufferedDC bdc4(&dc4);
+ 
+ int w1, h1, w2, h2, w3, h3, w4, h4;
+ int _w1, _h1, _w2, _h2, _w3, _h3, _w4, _h4;
+ double x0, y0, x1, y1;
+ int r, g, b;
+ 
+ WxPanel1->GetSize(&w1,&h1);
+ WxPanel2->GetSize(&w2,&h2);
+ WxPanel3->GetSize(&w3,&h3);
+ WxPanel4->GetSize(&w4,&h4);
+ 
+ _w1=w1/2.; _h1=h1/2.;
+ _w2=w2/2.; _h2=h2/2.;
+ _w3=w3/2.; _h3=h3/2.;
+ _w4=w4/2.; _h4=h4/2.;
+ 
+ bdc1.SetDeviceOrigin(_w1, _h1);
+ 
+ 
+ bdc1.SetBackground(wxBrush(RGB(255,255,255)));
+ bdc1.Clear(); 
+ bdc2.SetBackground(wxBrush(RGB(255,255,255)));
+ bdc2.Clear(); 
+ bdc3.SetBackground(wxBrush(RGB(255,255,255)));
+ bdc3.Clear(); 
+ bdc4.SetBackground(wxBrush(RGB(255,255,255)));
+ bdc4.Clear();
+ 
+
+ Matrix ox = fac->RotateX(0);
+ Matrix oy = fac->RotateY(0);
+ Matrix oz = fac->RotateZ(0);
+ Matrix rotacja = ox*oy*oz;
+ 
+ Matrix rzut;
+ rzut.data[3][2]=1.0/d;
+ 
+ Matrix skalowanie; 
+ skalowanie.data[0][0]=(99+1.0)/100.0;
+ skalowanie.data[1][1]=(99+1.0)/100.0;
+ skalowanie.data[2][2]=(99+1.0)/100.0;
+ 
+Matrix translacja;
+translacja.data[0][3]=(50-50)/20.0; 
+translacja.data[1][3]=(50-50)/20.0;
+translacja.data[2][3]=(50-50)/20.0;
+ 
+ Matrix matrix;
+ matrix = translacja*rotacja*skalowanie*rzut;
+ 
+ Vector* cvVector;
+
+ for(int i = 0; !access[i] ;i++){
+    for(int j = 0; j < SolArr[i]->getSize();j++){
+        cvVector = SolArr[i]->getSingleVec(j);
+      /*  Coord cvBegin = cvVector->getBegin();
+        Coord cvEnd = cvVector->getEnd();
+        matrix*cvBegin;
+        matrix*cvEnd;
+        cvVector->setBegin(cvBegin);
+        cvVector->setEnd(cvEnd);*/
+        
+        x0=(cvVector->getBegin().get_x()*d/(cvVector->getBegin().get_z()+d))*w1/2.5;
+        y0=(cvVector->getBegin().get_y()*d/(cvVector->getBegin().get_z()+d))*h1/2.5;
+        x1=(cvVector->getEnd().get_x()*d/(cvVector->getEnd().get_z()+d))*w1/2.5;
+        y1=(cvVector->getEnd().get_y()*d/(cvVector->getEnd().get_z()+d))*h1/2.5;
+        
+        r = cvVector->getColour().get_r();
+        g = cvVector->getColour().get_g();
+        b = cvVector->getColour().get_b();
+        
+        bdc1.SetPen(wxPen(RGB(r,g,b)));
+        bdc1.DrawLine(x0,y0,x1,y1);
+    }           
+ }
+//  if(!access[0])
+//    dynamic_cast<Cylinder*>(SolArr[0])->toFile();
+
+ 
+// bdc1.SetPen(wxPen(RGB(0,0,0)));
+// bdc1.DrawLine(x0,y0,x1,y1);
+    
+/*    for(){
+        v1.Set(*xs,*ys,*zs);
+        v2.Set(*xe,*ye,*ze);
+        
+        v1=matrix*v1;
+        v2=matrix*v2;
+        double x0=(v1.GetX()*d/(v1.data[2]+d))*w/2.5 + w2;
+        double y0=(v1.GetY()*d/(v1.data[2]+d))*h/2.5 + h2;
+        double x1=(v2.GetX()*d/(v2.data[2]+d))*w/2.5 + w2;
+        double y1=(v2.GetY()*d/(v2.data[2]+d))*h/2.5 + h2;
+        bdc.SetPen(wxPen(RGB(*rI,*gI,*bI)));
+        bdc.DrawLine(x0,y0,x1,y1);
+        //bdc.DrawLine(v1.GetX()/v1.data[3],v1.GetY()/v1.data[3],v2.GetX()/v2.data[3],v2.GetY()/v2.data[3]);
+    }*/
+}
+
+void EdytorFrm::WxPanelUpdateUI(wxUpdateUIEvent& event){
+    Repaint();
 }

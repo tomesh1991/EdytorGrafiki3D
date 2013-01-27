@@ -2,6 +2,7 @@
 #define _SOLID_
 
 #include <stdlib.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -37,8 +38,11 @@ class Solid {
         Vector** getVecArr() {
             return __vecArr;    
         }
-        
-        virtual void draw(/* wxDC *dc */) = 0;
+        //mod by Wach////////////////////
+        Vector* getSingleVec(int i){
+            return __vecArr[i];    
+        }
+        //////////////////////////////////
         
         virtual void move(double*) = 0;
         virtual void rotate(double*) = 0;
@@ -80,10 +84,6 @@ class Line : public Solid {
         
         void setEnd(Coord& end) {
             __end = end;
-        }
-        
-        void draw(/* wxDC *dc */){
-			//TO DO
         }
         
         void move(double* mvect){
@@ -146,10 +146,6 @@ class Box : public Solid {
         void setEnd(Coord& end) {
             __end = end;
         }
-        
-        void draw(/* wxDC *dc */){
-			//TO DO
-		}
 		
 		void move(double* mvect){
             __start.set_x(__start.get_x() + mvect[1]);
@@ -237,9 +233,6 @@ class Sphere : public Solid {
             __parallel = parallel;
         }
         
-        void draw(/* wxDC *dc */){
-			//TO DO
-		}
 		
 		void move(double* mvect){
             __center.set_x(__center.get_x() + mvect[1]);
@@ -247,7 +240,9 @@ class Sphere : public Solid {
             __center.set_z(__center.get_z() + mvect[3]);
         }
         
-        void rotate(double* par){}
+        void rotate(double* par){
+            
+        }
         
         string toString() {
 			stringstream strm;
@@ -326,10 +321,6 @@ class Cone : public Solid {
 		}
 		void setLateralSurfaceDivision(int div){
 			__lateralSurfaceDivision = div;
-		}
-		
-		void draw(/* wxDC *dc */){
-			//TO DO
 		}
 		
 		void move(double* mvect){
@@ -416,10 +407,6 @@ class Cylinder : public Solid {
 			__lateralSurfaceDivision = div;
 		}
 		
-		void draw(/* wxDC *dc */){
-			//TO DO
-		}
-		
 		void move(double* mvect){
             __lowerRadixCenter.set_x(__lowerRadixCenter.get_x() + mvect[1]);
             __lowerRadixCenter.set_y(__lowerRadixCenter.get_y() + mvect[2]);
@@ -431,6 +418,17 @@ class Cylinder : public Solid {
         }
         
         void rotate(double* par){}
+		
+		void toFile() {
+			stringstream strm;
+			FILE* fp;
+			fp = fopen("file.geo","w");
+			for(int i = 0 ;i<__size;i++){
+                strm << __vecArr[i]->getBegin().get_x() << " " << __vecArr[i]->getBegin().get_y() << " " << __vecArr[i]->getBegin().get_z() << " " << __vecArr[i]->getEnd().get_x() << " " << __vecArr[i]->getEnd().get_y() << " " << __vecArr[i]->getEnd().get_z() << " " << 0 << " " << 0 << " " << 0 << endl;
+                fputs(strm.str().c_str(), fp);    
+            }
+            fclose(fp);
+        }
 		
 		string toString() {
 			stringstream strm;

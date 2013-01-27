@@ -49,6 +49,7 @@ class EdytorFrm : public wxFrame
 		EdytorFrm(wxWindow *parent, wxWindowID id = 1, const wxString &title = wxT("Edytor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = EdytorFrm_STYLE);
 		virtual ~EdytorFrm();
 		void WxEdit1Enter(wxCommandEvent& event);
+		void WxPanelUpdateUI(wxUpdateUIEvent& event);
 		
 	private:
 		//Do not add custom control declarations between
@@ -90,6 +91,7 @@ class EdytorFrm : public wxFrame
 			ID_WXPANEL3 = 1015,
 			ID_WXPANEL2 = 1014,
 			ID_WXPANEL1 = 1013,
+			ID_WXPANEL = 1002,
 			////GUI Enum Control ID End
 			ID_DUMMY_VALUE_ //don't remove this value unless you have other enum values
 		};
@@ -102,6 +104,7 @@ class EdytorFrm : public wxFrame
     	void rest(string);
     	void SaveSolid(string);
        	void LoadSolid(string);
+       	void Repaint();
 };
 
 #endif

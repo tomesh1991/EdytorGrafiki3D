@@ -68,7 +68,6 @@ class Vector{
                  << __col.get_r() << " " << __col.get_g() << " " << __col.get_b() << endl;
             return strm.str();
         }
-        
 };
 
 class Matrix
@@ -128,6 +127,7 @@ class Matrix
         for (i=0;i<4;i++) 
              sum += data[2][i] * gCrd[i];
         gCoord.set_z(sum);    
-    };
+    };   
+    
 };
 #endif //_VECTOR_H_

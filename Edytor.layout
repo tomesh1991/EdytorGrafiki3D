@@ -6,7 +6,7 @@ Open=1
 Top=0
 CursorCol=1
 CursorRow=12
-TopLine=1
+TopLine=5
 LeftChar=1
 [Editor_1]
 Open=1
@@ -25,16 +25,22 @@ LeftChar=1
 [Editor_3]
 Open=1
 Top=0
-CursorCol=8
-CursorRow=100
-TopLine=17
+CursorCol=48
+CursorRow=52
+TopLine=35
 LeftChar=1
 [Editor_4]
 Open=1
 Top=0
+<<<<<<< HEAD
 CursorCol=13
 CursorRow=27
 TopLine=319
+=======
+CursorCol=45
+CursorRow=394
+TopLine=367
+>>>>>>> Rysowanie w pierwszym okienku. Problem?/
 LeftChar=1
 [Editor_5]
 Open=1
