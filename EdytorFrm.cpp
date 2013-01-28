@@ -311,10 +311,8 @@ void EdytorFrm::Repaint() {
  
  Vector* cvVector;
  Matrix macierz, translacja;
-//*****************szel¹gowe macierze***********************************8
   double x, y, z, x0, x1, y0, y1;      
-      
-//***************************************************
+
  bdc1.SetDeviceOrigin(_w1, _h1);
  bdc2.SetDeviceOrigin(_w2, _h2);
  bdc3.SetDeviceOrigin(_w3, _h3);
@@ -500,6 +498,52 @@ void EdytorFrm::MoveSolid(Solid* sol, double* params) {
         cvVector->setBegin(cvBegin);
         cvVector->setEnd(cvEnd);
     }
+    
+    Coord startLn;
+    Coord endLn;
+    
+    Line* ln = dynamic_cast<Line*>(sol);
+    if(ln){
+        startLn = ln->getStart();
+        endLn = ln->getEnd();
+        macierz*startLn;
+        macierz*endLn;
+        ln->setStart(startLn);
+        ln->setEnd(endLn);
+    }
+    Box* box = dynamic_cast<Box*>(sol);
+    if(box){
+        startLn = box->getStart();
+        endLn = box->getEnd();
+        macierz*startLn;
+        macierz*endLn;
+        box->setStart(startLn);
+        box->setEnd(endLn); 
+    }
+    Sphere* sp = dynamic_cast<Sphere*>(sol);
+    if(sp){
+        startLn = sp->getCenter();
+        macierz*startLn;
+        sp->setCenter(startLn);
+    }
+    Cone* cn = dynamic_cast<Cone*>(sol);
+    if(cn){
+        startLn = cn->getLowerRadixCenter();
+        endLn = cn->getUpperRadixCenter();
+        macierz*startLn;
+        macierz*endLn;
+        cn->setLowerRadixCenter(startLn);
+        cn->setUpperRadixCenter(endLn); 
+    }
+    Cylinder* cl = dynamic_cast<Cylinder*>(sol);
+    if(cl){
+        startLn = cl->getLowerRadixCenter();
+        endLn = cl->getUpperRadixCenter();
+        macierz*startLn;
+        macierz*endLn;
+        cl->setLowerRadixCenter(startLn);
+        cl->setUpperRadixCenter(endLn); 
+    }
     Repaint();
 }
 
@@ -518,6 +562,52 @@ void EdytorFrm::RotateSolid(Solid* sol, double* params) {
         macierz*cvEnd;       
         cvVector->setBegin(cvBegin);
         cvVector->setEnd(cvEnd);
+    }
+    
+    Coord startLn;
+    Coord endLn;
+    
+    Line* ln = dynamic_cast<Line*>(sol);
+    if(ln){
+        startLn = ln->getStart();
+        endLn = ln->getEnd();
+        macierz*startLn;
+        macierz*endLn;
+        ln->setStart(startLn);
+        ln->setEnd(endLn);
+    }
+    Box* box = dynamic_cast<Box*>(sol);
+    if(box){
+        startLn = box->getStart();
+        endLn = box->getEnd();
+        macierz*startLn;
+        macierz*endLn;
+        box->setStart(startLn);
+        box->setEnd(endLn); 
+    }
+    Sphere* sp = dynamic_cast<Sphere*>(sol);
+    if(sp){
+        startLn = sp->getCenter();
+        macierz*startLn;
+        sp->setCenter(startLn);
+    }
+    Cone* cn = dynamic_cast<Cone*>(sol);
+    if(cn){
+        startLn = cn->getLowerRadixCenter();
+        endLn = cn->getUpperRadixCenter();
+        macierz*startLn;
+        macierz*endLn;
+        cn->setLowerRadixCenter(startLn);
+        cn->setUpperRadixCenter(endLn); 
+    }
+    Cylinder* cl = dynamic_cast<Cylinder*>(sol);
+    if(cl){
+        startLn = cl->getLowerRadixCenter();
+        endLn = cl->getUpperRadixCenter();
+        macierz*startLn;
+        macierz*endLn;
+        cl->setLowerRadixCenter(startLn);
+        cl->setUpperRadixCenter(endLn); 
     }
     
     Repaint();
