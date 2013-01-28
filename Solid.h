@@ -68,7 +68,7 @@ class Line : public Solid {
             : Solid(id, color), __start(start), __end(end) {
             __size = 1;
             __vecArr = new Vector* [__size];
-            __vecArr[0] = new Vector(start,end);
+            __vecArr[0] = new Vector(start,end,color);
         }
         virtual ~Line(){
             delete __vecArr[0];

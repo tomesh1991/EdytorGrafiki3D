@@ -74,6 +74,7 @@ public:
     }
     
     bool box(Box* bo) {
+        RGBCol tmpcol = bo->getcol();
     	Coord begin = bo->getStart();
     	Coord end = bo->getEnd();
     	double x1 = begin.get_x();
@@ -82,23 +83,24 @@ public:
     	double x2 = end.get_x();
     	double y2 = end.get_y();
     	double z2 = end.get_z();
-    	bo->getVecArr()[0] = new Vector(begin,Coord(x2,y1,z1));
-    	bo->getVecArr()[1] = new Vector(begin,Coord(x1,y2,z1));
-    	bo->getVecArr()[2] = new Vector(Coord(x1,y2,z1),Coord(x2,y2,z1));
-    	bo->getVecArr()[3] = new Vector(Coord(x2,y1,z1),Coord(x2,y2,z1));
-    	bo->getVecArr()[4] = new Vector(begin,Coord(x1,y1,z2));
-    	bo->getVecArr()[5] = new Vector(Coord(x1,y2,z1),Coord(x1,y2,z2));
-    	bo->getVecArr()[6] = new Vector(Coord(x2,y2,z1),end);
-    	bo->getVecArr()[7] = new Vector(Coord(x2,y1,z1),Coord(x2,y1,z2));
-    	bo->getVecArr()[8] = new Vector(Coord(x1,y1,z2),Coord(x1,y2,z2));
-    	bo->getVecArr()[9] = new Vector(Coord(x1,y1,z2),Coord(x2,y1,z2));
-    	bo->getVecArr()[10] = new Vector(Coord(x1,y2,z2),end);
-    	bo->getVecArr()[11] = new Vector(Coord(x2,y1,z2),end);
+    	bo->getVecArr()[0] = new Vector(begin,Coord(x2,y1,z1),tmpcol);
+    	bo->getVecArr()[1] = new Vector(begin,Coord(x1,y2,z1),tmpcol);
+    	bo->getVecArr()[2] = new Vector(Coord(x1,y2,z1),Coord(x2,y2,z1),tmpcol);
+    	bo->getVecArr()[3] = new Vector(Coord(x2,y1,z1),Coord(x2,y2,z1),tmpcol);
+    	bo->getVecArr()[4] = new Vector(begin,Coord(x1,y1,z2),tmpcol);
+    	bo->getVecArr()[5] = new Vector(Coord(x1,y2,z1),Coord(x1,y2,z2),tmpcol);
+    	bo->getVecArr()[6] = new Vector(Coord(x2,y2,z1),end,tmpcol);
+    	bo->getVecArr()[7] = new Vector(Coord(x2,y1,z1),Coord(x2,y1,z2),tmpcol);
+    	bo->getVecArr()[8] = new Vector(Coord(x1,y1,z2),Coord(x1,y2,z2),tmpcol);
+    	bo->getVecArr()[9] = new Vector(Coord(x1,y1,z2),Coord(x2,y1,z2),tmpcol);
+    	bo->getVecArr()[10] = new Vector(Coord(x1,y2,z2),end,tmpcol);
+    	bo->getVecArr()[11] = new Vector(Coord(x2,y1,z2),end,tmpcol);
     	return true;
     }
     
     bool sphere(Sphere* sp) { 
     	//m - poludniki n - rownolezniki
+    	RGBCol tmpcol = sp->getcol();
     	Coord center = sp->getCenter();
     	double r = sp->getRadius();
     	int m = sp->getMeridian();
@@ -115,13 +117,14 @@ public:
     		double new_y = y+r - i*spacing;
     		if(fabs(new_y) < 0.0000001) new_y = 0.;
     		Coord tmp_center(x,new_y,z);
-    		double new_r = ((2*x + sqrt(3*pow(x,2) - pow((new_y-y),2) + pow(r,2)))) - x;
+    		//double new_r = ((2*x + sqrt(3*pow(x,2) - pow((new_y-y),2) + pow(r,2)))) - x;
+    		double new_r = sqrt(pow(r,2)-pow((new_y-y),2));
     		if(fabs(new_r) < 0.0000001) new_r = 0.;
     		for(int j=1;j<=m;++j) {
     			double crad = rad * (j-1);
-    			double new_x = cos(crad)*new_r;
+    			double new_x = cos(crad)*new_r + x;
     			if(fabs(new_x) < 0.0000001) new_x = 0.;
-    			double new_z = sin(crad)*new_r;
+    			double new_z = sin(crad)*new_r + z;
     			if(fabs(new_z) < 0.0000001) new_z = 0.;
     			cArr[(i-1)*m + j] = Coord(new_x,new_y,new_z);
     		}
@@ -139,7 +142,7 @@ public:
     			end = cArr[(i-1)*m + j + 1];
     			}
     			
-    			sp->getVecArr()[base] = new Vector(begin,end);
+    			sp->getVecArr()[base] = new Vector(begin,end,tmpcol);
     			++base;
     		}
     	}
@@ -149,14 +152,14 @@ public:
     		Coord begin = cArr[0];
     		Coord end = cArr[j];
     		
-    		sp->getVecArr()[base] = new Vector(begin,end);
+    		sp->getVecArr()[base] = new Vector(begin,end,tmpcol);
     		++base;
     	}
     	for(int j=1;j<=m;++j) {
     		Coord begin = cArr[m*n + 1];
     		Coord end = cArr[(n-1)*m + j];
     		
-    		sp->getVecArr()[base] = new Vector(begin,end);
+    		sp->getVecArr()[base] = new Vector(begin,end,tmpcol);
     		++base;
     	}
     	//miedzy rownoleznikami
@@ -165,7 +168,7 @@ public:
     			Coord begin = cArr[(i-1)*m + j];
     			Coord end = cArr[i*m + j];
     			
-    			sp->getVecArr()[base] = new Vector(begin,end);
+    			sp->getVecArr()[base] = new Vector(begin,end,tmpcol);
     			++base;
     		}
     	}
@@ -174,6 +177,7 @@ public:
     }
     
     bool cone(Cone* co){
+        RGBCol tmpcol = co->getcol();
         Coord bottom = co->getLowerRadixCenter();
         Coord top = co->getUpperRadixCenter();
         double rb = co->getLowerRadixRadius();
@@ -257,29 +261,36 @@ public:
         for(int i=0;i<(n-1);++i) {
     		co->getVecArr()[i]->setBegin(cArr[i]);
     		co->getVecArr()[i]->setEnd(cArr[i+1]);
+    		co->getVecArr()[i]->setColour(tmpcol);
     	}
     		co->getVecArr()[n-1]->setBegin(cArr[n-1]);
     		co->getVecArr()[n-1]->setEnd(cArr[0]);
+    		co->getVecArr()[n-1]->setColour(tmpcol);
         //druga podstawa
         for(int i=n;i<((2*n)-1);++i) {
     		co->getVecArr()[i]->setBegin(cArr[i]);
     		co->getVecArr()[i]->setEnd(cArr[i+1]);
+    		co->getVecArr()[i]->setColour(tmpcol);
     	}
     		co->getVecArr()[2*n-1]->setBegin(cArr[2*n-1]);
     		co->getVecArr()[2*n-1]->setEnd(cArr[n]);
+    		co->getVecArr()[2*n-1]->setColour(tmpcol);
     	//sciany boczne
     	for(int i=0;i<(n-1);++i) {
     		co->getVecArr()[2*n + i]->setBegin(cArr[i]);
     		co->getVecArr()[2*n + i]->setEnd(cArr[n+i]);
+    		co->getVecArr()[2*n + i]->setColour(tmpcol);
     	}
     		co->getVecArr()[3*n-1]->setBegin(cArr[n-1]);
     		co->getVecArr()[3*n-1]->setEnd(cArr[(2*n)-1]);
+    		co->getVecArr()[3*n-1]->setColour(tmpcol);
         //zwalnianie pamieci i return
         delete [] cArr;
         return true;
     }
     
     bool cylinder(Cylinder* cyl) {
+        RGBCol tmpcol = cyl->getcol();
         Coord bottom = cyl->getLowerRadixCenter();
         Coord top = cyl->getUpperRadixCenter();
         double r = cyl->getRadixRadius();
@@ -346,23 +357,29 @@ public:
         for(int i=0;i<(n-1);++i) {
     		cyl->getVecArr()[i]->setBegin(cArr[i]);
     		cyl->getVecArr()[i]->setEnd(cArr[i+1]);
+    		cyl->getVecArr()[i]->setColour(tmpcol);
     	}
     		cyl->getVecArr()[n-1]->setBegin(cArr[n-1]);
     		cyl->getVecArr()[n-1]->setEnd(cArr[0]);
+    		cyl->getVecArr()[n-1]->setColour(tmpcol);
         //druga podstawa
         for(int i=n;i<((2*n)-1);++i) {
     		cyl->getVecArr()[i]->setBegin(cArr[i]);
     		cyl->getVecArr()[i]->setEnd(cArr[i+1]);
+    		cyl->getVecArr()[i]->setColour(tmpcol);
     	}
     		cyl->getVecArr()[2*n-1]->setBegin(cArr[2*n-1]);
     		cyl->getVecArr()[2*n-1]->setEnd(cArr[n]);
+    		cyl->getVecArr()[2*n-1]->setColour(tmpcol);
     	//sciany boczne
     	for(int i=0;i<(n-1);++i) {
     		cyl->getVecArr()[2*n + i]->setBegin(cArr[i]);
     		cyl->getVecArr()[2*n + i]->setEnd(cArr[n+i]);
+    		cyl->getVecArr()[2*n + i]->setColour(tmpcol);
     	}
     		cyl->getVecArr()[3*n-1]->setBegin(cArr[n-1]);
     		cyl->getVecArr()[3*n-1]->setEnd(cArr[(2*n)-1]);
+    		cyl->getVecArr()[3*n-1]->setColour(tmpcol);
         //zwalnianie pamieci i return
         delete [] cArr;
         return true;
