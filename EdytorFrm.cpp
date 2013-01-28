@@ -10,8 +10,10 @@
 
 #include "EdytorFrm.h"
 #include "String_Splitter.h"
+#include "Chain.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <fstream>
 #include <stdio.h>
@@ -131,8 +133,8 @@ void EdytorFrm::SaveSolid(string file_name) {
 
 void EdytorFrm::LoadSolid(string file_name) {
     ifstream file(file_name.c_str()); //otwieramy plik
-    std::vector<string>* v;
     std::string str;
+    double* param;
     for(unsigned int i = 0; i < 100; ++i){
         if(SolArr[i] != NULL){
             delete SolArr[i];
@@ -145,105 +147,27 @@ void EdytorFrm::LoadSolid(string file_name) {
     
     if(file){
         while(getline(file, str)){
-            int solid_id;
-            int id;
-            wxString *s = new wxString();
-            for(unsigned int i = 0; i < str.length(); ++i){
-                if(str[i] == '(' && str[i] ==')'){
-                    str.erase(str.begin() + i); //oczyszczamy stringa z nawiasów
-                }
-                if(str[i] == ' '){
-                    str[i] = ','; //zamieniamy spacje na przecinki (jednolity separator danych)
-                }
-            }
-            v = string_splitter(str,","); //dzielimy przetworzonego stringa z komenda programu na poszczegolne skladowe
+            std::string *st = new std::string("");
+            std::vector<string> *vect = string_splitter(str);
             
-            if(v->at(1).compare("line")){
-                solid_id = 1; //okreslamy typ zadanej bryly
-                id = strtod(v->at(0).c_str(),NULL);  //wyciagamy nr ID bryly
-                double param[7];
-                param[0] = solid_id;
-                
-                for(unsigned int i = 1; i < 7; ++i){
-                    param[i] = strtod(v->at(i+1).c_str(),NULL);
-                }
-                //tworzymy i wypelniamy wartosciami tablice zawierajaca parametry tworzonej bryly
-                SolArr[array_index] = fac->produce(id,__col,param);
-                access[array_index] = false;
-                //wstawiamy utworzona bryle w kontenerze i ustawiamy flage dostepnosci komorki na zajeta
-                (*s) << SolArr[array_index]->toList().c_str();
-                WxListBox1->InsertItems(1,s,0);
-                //uzupelniamy liste aktualnie wyswietlanych figur o aktualnie dodana
-                ++array_index;
-                
-            }else if(v->at(1).compare("box")){
-                solid_id = 2;
-                id = strtod(v->at(0).c_str(),NULL);
-                double param[7];
-                param[0] = solid_id;
-                
-                for(unsigned int i = 1; i < 7; ++i){
-                    param[i] = strtod(v->at(i+1).c_str(),NULL);
-                }
-                
-                SolArr[array_index] = fac->produce(id,__col,param);
-                access[array_index] = false;
-                (*s) << SolArr[array_index]->toList().c_str();
-                WxListBox1->InsertItems(1,s,0);
-                ++array_index;
-                
-            }else if(v->at(1).compare("sphere")){
-                solid_id = 3;
-                id = strtod(v->at(0).c_str(),NULL);
-                double param[7];
-                param[0] = solid_id;
-                
-                for(unsigned int i = 1; i < 7; ++i){
-                    param[i] = strtod(v->at(i+1).c_str(),NULL);
-                }
-                
-                SolArr[array_index] = fac->produce(id,__col,param);
-                access[array_index] = false;
-                (*s) << SolArr[array_index]->toList().c_str();
-                WxListBox1->InsertItems(1,s,0);
-                ++array_index;
-                
-            }else if(v->at(1).compare("cone")){
-                solid_id = 4;
-                id = strtod(v->at(0).c_str(),NULL);
-                double param[9];
-                param[0] = solid_id;
-                
-                for(unsigned int i = 1; i < 9; ++i){
-                    param[i] = strtod(v->at(i+1).c_str(),NULL);
-                }
-                
-                SolArr[array_index] = fac->produce(id,__col,param);
-                access[array_index] = false;
-                (*s) << SolArr[array_index]->toList().c_str();
-                WxListBox1->InsertItems(1,s,0);
-                ++array_index;
-                
-            }else if(v->at(1).compare("cylinder")){
-                solid_id = 5;
-                id = strtod(v->at(0).c_str(),NULL);
-                double param[8];
-                param[0] = solid_id;
-                
-                for(unsigned int i = 1; i < 8; ++i){
-                    param[i] = strtod(v->at(i+1).c_str(),NULL);
-                }
-                
-                SolArr[array_index] = fac->produce(id,__col,param);
-                access[array_index] = false;
-                (*s) << SolArr[array_index]->toList().c_str();
-                WxListBox1->InsertItems(1,s,0);
-                ++array_index;
-            }else{
-                solid_id = 0;
-            }
-            delete v; 
+            wxString *s = new wxString();
+            int id = 0;
+            
+            for (std::vector<std::string>::iterator it = vect->begin()+1 ; it != vect->end(); ++it) {
+				(*st) += *it + ",";
+			}
+            Chain chain(*st);
+            param = chain.solve();
+            
+            SolArr[array_index] = fac->produce(id,__col,param);
+            access[array_index] = false;
+             
+            (*s) << SolArr[array_index]->toList().c_str();
+            WxListBox1->InsertItems(1,s,0);
+            ++array_index;
             delete s;
+            delete st;
+            delete vect;
         }//interpreter polecen zapisanych w pliku
     }
     file.close(); //zamykamy plik

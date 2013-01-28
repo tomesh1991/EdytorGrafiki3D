@@ -1,7 +1,7 @@
 # Project: Edytor
 # Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 28-01-13 14:42
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 28-01-13 15:47
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe
@@ -39,5 +39,5 @@ $(BIN): $(OBJ)
 Objects/MingW/EdytorApp.o: $(GLOBALDEPS) EdytorApp.cpp EdytorApp.h EdytorFrm.h Chain.h Factory.h Solid.h Vector.h RGBCol.h Coord.h
 	$(CPP) -c EdytorApp.cpp -o Objects/MingW/EdytorApp.o $(CXXFLAGS)
 
-Objects/MingW/EdytorFrm.o: $(GLOBALDEPS) EdytorFrm.cpp EdytorFrm.h Chain.h Factory.h Solid.h Vector.h RGBCol.h Coord.h String_Splitter.h
+Objects/MingW/EdytorFrm.o: $(GLOBALDEPS) EdytorFrm.cpp EdytorFrm.h Chain.h Factory.h Solid.h Vector.h RGBCol.h Coord.h String_Splitter.h Chain.h
 	$(CPP) -c EdytorFrm.cpp -o Objects/MingW/EdytorFrm.o $(CXXFLAGS)
