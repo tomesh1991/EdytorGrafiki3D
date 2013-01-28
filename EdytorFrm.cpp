@@ -124,7 +124,6 @@ void EdytorFrm::SaveSolid(string file_name) {
     for(unsigned int i = 0; i < 100; ++i){
         if(access[i] != true){
             file << SolArr[i]->toList() << std::endl; //wstawiamy reprezentacje stringowa kazdego solida do pliku
-            ++i;
         }
     }//utworzony plik jest de facto skryptem z poleceniami programu, ktore zostana zinterpretowane podczas jego wczytywania 
     file.close(); //zamykamy plik
