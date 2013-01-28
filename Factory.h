@@ -195,11 +195,11 @@ public:
         z_t = top.get_z();
         //obliczanie wartosci katow
         double ox = 0, oy = 0, oz = 0;
-        if((z_t-z_b) != 0 /*&& (y_t-y_b) != 0*/) ox = (atan((z_t-z_b)/(y_t-y_b)));
+        if((z_t-z_b) != 0 ) ox = (atan((z_t-z_b)/(y_t-y_b)));
         else ox = 0.;
-        if((z_t-z_b) != 0 /*&& (x_t-x_b) != 0*/) oy = (atan((x_t-x_b)/(z_t-z_b)));
+        if((z_t-z_b) != 0 ) oy = (atan((x_t-x_b)/(z_t-z_b)));
         else oy = 0.;
-        if((x_t-x_b) != 0 /*&& (y_t-y_b) != 0*/) oz = (atan((y_t-y_b)/(x_t-x_b)));
+        if((x_t-x_b) != 0 ) oz = (atan((y_t-y_b)/(x_t-x_b)));
         else oz = 0.;
         //tworzymy tymczasawa, zwalniana na koncu, tablice dla wspolrzednych
         Coord* cArr = new Coord[2*n];
@@ -224,24 +224,36 @@ public:
     	}
     	//rotacja pierwszej podstawy
         for(int i=0;i<n;++i) {
-            if(fabs(z_t-z_b) == 0) {
-                RotateY(oy)*cArr[i];       
-                RotateZ(-oz)*cArr[i];
+            if(fabs(z_t-z_b) == 0 && fabs(y_t-y_b) == 0) {
+                if(x_t-x_b > 0) RotateZ(M_PI/2.)*cArr[i];
+                else RotateZ(-M_PI/2.)*cArr[i];
             }
-            else {      
-                RotateX(ox)*cArr[i];
-                RotateY(oy)*cArr[i]; 
+            else {
+                if(fabs(z_t-z_b) == 0) {
+                    RotateY(oy)*cArr[i];       
+                    RotateZ(-oz)*cArr[i];
+                }
+                else {      
+                    RotateX(ox)*cArr[i];
+                    RotateY(oy)*cArr[i]; 
+                }
             }
         }
         //rotacja drugiej podstawy
         for(int i=n;i<(2*n);++i) {
-            if(fabs(z_t-z_b) == 0) {
-                RotateY(oy)*cArr[i];       
-                RotateZ(-oz)*cArr[i];
+            if(fabs(z_t-z_b) == 0 && fabs(y_t-y_b) == 0) {
+                if(x_t-x_b > 0) RotateZ(M_PI/2.)*cArr[i];
+                else RotateZ(-M_PI/2.)*cArr[i];
             }
-            else {      
-                RotateX(ox)*cArr[i];
-                RotateY(oy)*cArr[i]; 
+            else {
+                if(fabs(z_t-z_b) == 0) {
+                    RotateY(oy)*cArr[i];       
+                    RotateZ(-oz)*cArr[i];
+                }
+                else {      
+                    RotateX(ox)*cArr[i];
+                    RotateY(oy)*cArr[i]; 
+                }
             }
         }  
         //odsylanie pierwszej podstawy
@@ -306,11 +318,11 @@ public:
         z_t = top.get_z();
         //obliczanie wartosci katow
         double ox = 0, oy = 0, oz = 0;
-        if((z_t-z_b) != 0 /*&& (y_t-y_b) != 0*/) ox = (atan((z_t-z_b)/(y_t-y_b)));
+        if((z_t-z_b) != 0 ) ox = (atan((z_t-z_b)/(y_t-y_b)));
         else ox = 0.;
-        if((z_t-z_b) != 0 /*&& (x_t-x_b) != 0*/) oy = (atan((x_t-x_b)/(z_t-z_b)));
+        if((z_t-z_b) != 0 ) oy = (atan((x_t-x_b)/(z_t-z_b)));
         else oy = 0.;
-        if((x_t-x_b) != 0 /*&& (y_t-y_b) != 0*/) oz = (atan((y_t-y_b)/(x_t-x_b)));
+        if((x_t-x_b) != 0 ) oz = (atan((y_t-y_b)/(x_t-x_b)));
         else oz = 0.;
         //tworzymy tymczasawa, zwalniana na koncu, tablice dla wspolrzednych
         Coord* cArr = new Coord[2*n];
@@ -327,13 +339,19 @@ public:
     	}
     	//rotacja
         for(int i=0;i<n;++i) {
-            if(fabs(z_t-z_b) == 0) {
-                RotateY(oy)*cArr[i];       
-                RotateZ(-oz)*cArr[i];
+            if(fabs(z_t-z_b) == 0 && fabs(y_t-y_b) == 0) {
+                if(x_t-x_b > 0) RotateZ(M_PI/2.)*cArr[i];
+                else RotateZ(-M_PI/2.)*cArr[i];
             }
-            else {      
-                RotateX(ox)*cArr[i];
-                RotateY(oy)*cArr[i]; 
+            else {
+                if(fabs(z_t-z_b) == 0) {
+                    RotateY(oy)*cArr[i];       
+                    RotateZ(-oz)*cArr[i];
+                }
+                else {      
+                    RotateX(ox)*cArr[i];
+                    RotateY(oy)*cArr[i]; 
+                }
             }
         }    
         //kopiowanie uzyskanych punktow na druga podstawe
