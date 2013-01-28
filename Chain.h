@@ -79,12 +79,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp >> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -114,12 +116,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp >> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -149,12 +153,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp >> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -184,12 +190,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp >> __result[k];
-				else s >> __result[k];
-				++k;
+    			if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -218,13 +226,15 @@ public:
 			PtrStrVec str_vec = string_splitter(tmpstr,",");
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
-				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp>> __result[k];
-				else s >> __result[k];
-				++k;
+				stringstream s;				
+    		    if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -254,12 +264,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp>> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -289,12 +301,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp>> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -324,12 +338,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp>> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
@@ -359,12 +375,14 @@ public:
 			int k = 1;
 			for (std::vector<std::string>::iterator it = (str_vec->begin()+1); it != (str_vec->end()-1); ++it) {
 				stringstream s;
-				s << *it;
-				char tmp;
-				tmp = it->at(0);
-				if(tmp == '(') s >> tmp>> __result[k];
-				else s >> __result[k];
-				++k;
+				if(*it != "") {
+    				s << *it;
+    				char tmp;
+    				tmp = it->at(0);
+    				if(tmp == '(') s >> tmp>> __result[k];
+    				else s >> __result[k];
+    				++k;
+                }
 			}
 			delete str_vec;
         }
