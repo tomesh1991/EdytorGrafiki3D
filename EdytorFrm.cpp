@@ -436,7 +436,6 @@ void EdytorFrm::Repaint() {
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
         macierz*cvEnd;
-        //cvVector2 = new Vector();
         cvVector3->setBegin(cvBegin);
         cvVector3->setEnd(cvEnd);
         
@@ -453,7 +452,6 @@ void EdytorFrm::Repaint() {
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
         macierz*cvEnd;
-        //cvVector2 = new Vector();
         cvVector4->setBegin(cvBegin);
         cvVector4->setEnd(cvEnd);
         
@@ -470,7 +468,6 @@ void EdytorFrm::Repaint() {
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
         macierz*cvEnd;
-        //cvVector2 = new Vector();
         cvVector5->setBegin(cvBegin);
         cvVector5->setEnd(cvEnd);
         
@@ -563,10 +560,23 @@ void EdytorFrm::WxPanelUpdateUI(wxUpdateUIEvent& event){
 
 void EdytorFrm::MoveSolid(Solid* sol, double* params) {
 
-    Repaint();
+
+
+  //  Repaint();
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
-
-    Repaint();
+/*    Matrix macierz = rotateX(params[4])*rotateY(params[5])*rotateZ(params[6]);
+    Vector* cvVector;
+        
+    for(int i = 0; i < sol->getSize();i++){
+        cvVector = sol->getSingleVec(i);
+        Coord cvBegin = cvVector->getBegin();
+        Coord cvEnd = cvVector->getEnd();
+        macierz*cvBegin;
+        macierz*cvEnd;
+        cvVector->setBegin(cvBegin);
+        cvVector->setEnd(cvEnd);
+    }
+    Repaint();*/
 }
