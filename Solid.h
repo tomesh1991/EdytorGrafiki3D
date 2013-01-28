@@ -44,8 +44,13 @@ class Solid {
         }
         //////////////////////////////////
         
-        virtual void move(double*) = 0;
-        virtual void rotate(double*) = 0;
+        void move(double* param){
+            
+        }
+        
+        void rotate(double* param){
+            
+        }
         
         virtual string toString() = 0;
         virtual string toList() = 0;
@@ -86,7 +91,7 @@ class Line : public Solid {
             __end = end;
         }
         
-        void move(double* mvect){
+       /* void move(double* mvect){
             __start.set_x(__start.get_x() + mvect[1]);
             __start.set_y(__start.get_y() + mvect[2]);
             __start.set_z(__start.get_z() + mvect[3]);
@@ -96,7 +101,7 @@ class Line : public Solid {
             __end.set_z(__end.get_z() + mvect[3]);
         }
         
-        void rotate(double* par){}
+        void rotate(double* par){}*/
         
         string toString() {
 			stringstream strm;
@@ -147,7 +152,7 @@ class Box : public Solid {
             __end = end;
         }
 		
-		void move(double* mvect){
+		/*void move(double* mvect){
             __start.set_x(__start.get_x() + mvect[1]);
             __start.set_y(__start.get_y() + mvect[2]);
             __start.set_z(__start.get_z() + mvect[3]);
@@ -157,7 +162,7 @@ class Box : public Solid {
             __end.set_z(__end.get_z() + mvect[3]);
         }
         
-        void rotate(double* par){}
+        void rotate(double* par){}*/
         
         string toString() {
 			stringstream strm;
@@ -234,7 +239,7 @@ class Sphere : public Solid {
         }
         
 		
-		void move(double* mvect){
+		/*void move(double* mvect){
             __center.set_x(__center.get_x() + mvect[1]);
             __center.set_y(__center.get_y() + mvect[2]);
             __center.set_z(__center.get_z() + mvect[3]);
@@ -242,7 +247,7 @@ class Sphere : public Solid {
         
         void rotate(double* par){
             
-        }
+        }*/
         
         string toString() {
 			stringstream strm;
@@ -323,7 +328,7 @@ class Cone : public Solid {
 			__lateralSurfaceDivision = div;
 		}
 		
-		void move(double* mvect){
+		/*void move(double* mvect){
             __lowerRadixCenter.set_x(__lowerRadixCenter.get_x() + mvect[1]);
             __lowerRadixCenter.set_y(__lowerRadixCenter.get_y() + mvect[2]);
             __lowerRadixCenter.set_z(__lowerRadixCenter.get_z() + mvect[3]);
@@ -334,7 +339,7 @@ class Cone : public Solid {
         }
 		
 		void rotate(double* par){}
-		
+		*/
 		string toString() {
 			stringstream strm;
 			strm << __ID << ": Cone, first base at " << __lowerRadixCenter.toString() << ", with radius " << __lowerRadixRadius << ". Second base at " << __upperRadixCenter.toString() << ", with radius " << __upperRadixRadius << ". Rendered with " << __lateralSurfaceDivision << " quads.";
@@ -407,7 +412,7 @@ class Cylinder : public Solid {
 			__lateralSurfaceDivision = div;
 		}
 		
-		void move(double* mvect){
+		/*void move(double* mvect){
             __lowerRadixCenter.set_x(__lowerRadixCenter.get_x() + mvect[1]);
             __lowerRadixCenter.set_y(__lowerRadixCenter.get_y() + mvect[2]);
             __lowerRadixCenter.set_z(__lowerRadixCenter.get_z() + mvect[3]);
@@ -417,7 +422,7 @@ class Cylinder : public Solid {
             __upperRadixCenter.set_z(__upperRadixCenter.get_z() + mvect[3]);
         }
         
-        void rotate(double* par){}
+        void rotate(double* par){}*/
 		
 		void toFile() {
 			stringstream strm;

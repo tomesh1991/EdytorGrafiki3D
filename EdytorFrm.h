@@ -105,6 +105,14 @@ class EdytorFrm : public wxFrame
     	void SaveSolid(string);
        	void LoadSolid(string);
        	void Repaint();
+       	
+       	Matrix rotateX(double);
+       	Matrix rotateY(double);
+       	Matrix rotateZ(double);
+       	Matrix translation(double, double, double, double*, double*, double*);
+       	Matrix matrix(int, int);
+       	Matrix scale(int);
+       	
 };
 
 #endif
