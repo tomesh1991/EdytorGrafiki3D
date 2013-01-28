@@ -109,7 +109,7 @@ class EdytorFrm : public wxFrame
        	Matrix rotateX(double);
        	Matrix rotateY(double);
        	Matrix rotateZ(double);
-       	Matrix translation(double, double, double, double*, double*, double*);
+       	Matrix translation(double, double, double);
        	Matrix matrix(int, int);
        	Matrix scale(int);
        	

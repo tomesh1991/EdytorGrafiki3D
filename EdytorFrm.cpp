@@ -391,19 +391,17 @@ void EdytorFrm::Repaint() {
  bdc4.Clear();
  
  Vector* cvVector;
- Matrix macierz;
+ Matrix macierz, translacja;
 //*****************szel¹gowe macierze***********************************8
   double x, y, z, x0, x1, y0, y1;      
-    
-
-  macierz = matrix(_w1, _h1)*translation(50,50,50,&x,&y,&z)*rotateX(0)*rotateY(0)*rotateZ(0)*scale(99);  
+      
 //***************************************************
  bdc1.SetDeviceOrigin(_w1, _h1);
  bdc2.SetDeviceOrigin(_w2, _h2);
  bdc3.SetDeviceOrigin(_w3, _h3);
  bdc4.SetDeviceOrigin(_w4, _h4);
  
- translation(50,50,50,&x,&y,&z);//x,y,z
+
  
  for(int i = 0; i < 100 ;i++){
    if(!access[i])     
@@ -422,6 +420,11 @@ void EdytorFrm::Repaint() {
         cvVector2->setBegin(cvBegin);
         cvVector2->setEnd(cvEnd);
         //****************************OKNO1**************************
+        
+        translacja = translation(50,50,50);
+        x = translacja.data[0][3];
+        y = translacja.data[1][3];
+        z = -(translacja.data[2][3]-120)/60;
         
         x0 = ((cvVector2->getBegin().get_x()+x)/z)-50; 
         y0 = ((-cvVector2->getBegin().get_y()-y)/z)+50;
@@ -544,16 +547,16 @@ Matrix EdytorFrm::scale(int skala){//99
 }
 
 
-Matrix EdytorFrm::translation(double x, double y, double z, double* _x, double* _y, double* _z){
+Matrix EdytorFrm::translation(double x, double y, double z){
     Matrix macierzTranslacja;
     /// Translacja
     macierzTranslacja.data[0][0]=1.0;
     macierzTranslacja.data[1][1]=1.0;
     macierzTranslacja.data[2][2]=1.0;
     
-    *_x = macierzTranslacja.data[0][3]=1.0*x;
-    *_y = macierzTranslacja.data[1][3]=1.0*y;
-    *_z = macierzTranslacja.data[2][3]=-(1.0*z-120)/60;   
+    macierzTranslacja.data[0][3]=1.0*x;
+    macierzTranslacja.data[1][3]=1.0*y;
+    macierzTranslacja.data[2][3]=1.0*z; //-(1.0*z-120)/60;   
 
     return macierzTranslacja;
 }
@@ -563,10 +566,22 @@ void EdytorFrm::WxPanelUpdateUI(wxUpdateUIEvent& event){
 }
 
 void EdytorFrm::MoveSolid(Solid* sol, double* params) {
-
-
-
-  //  Repaint();
+    double x, y, z, x0, y0, x1, y1;
+    Vector* cvVector;
+    Matrix macierz;    
+    
+    macierz = translation(params[2],params[3],params[4]);
+        
+    for(int i = 0; i < sol->getSize();i++){
+        cvVector = sol->getSingleVec(i);
+        Coord cvBegin = cvVector->getBegin();
+        Coord cvEnd = cvVector->getEnd();
+        macierz*cvBegin;
+        macierz*cvEnd;       
+        cvVector->setBegin(cvBegin);
+        cvVector->setEnd(cvEnd);
+    }
+    Repaint();
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
@@ -574,7 +589,7 @@ void EdytorFrm::RotateSolid(Solid* sol, double* params) {
     Vector* cvVector;
     Matrix macierz;    
     
-    macierz = translation(params[2],params[3],params[4],&x,&y,&z)*rotateX(params[5])*rotateY(params[6])*rotateZ(params[7])*translation(-params[2],-params[3],-params[4],&x,&y,&z);
+    macierz = translation(params[2],params[3],params[4])*rotateX(params[5])*rotateY(params[6])*rotateZ(params[7])*translation(-params[2],-params[3],-params[4]);
         
     for(int i = 0; i < sol->getSize();i++){
         cvVector = sol->getSingleVec(i);
