@@ -277,6 +277,7 @@ void EdytorFrm::WxEdit1Enter(wxCommandEvent& event)
     double* params = ch->solve();
     int tmp_index = 0;
     int tmpID = 0;
+    int index = 0;
     wxString stmp;
     while(!access[tmp_index]) tmp_index++;
     if(tmp_index<100){
@@ -330,15 +331,16 @@ void EdytorFrm::WxEdit1Enter(wxCommandEvent& event)
             case  8 :   tmpID = 0;
                         stmp << params[1];                        
                         while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
-                        MoveSolid(SolArr[(int)params[0]],params);
-                        (*str) << SolArr[(int)(params[0])]->toList().c_str();
+                        MoveSolid(SolArr[(int)params[1]],params);
+                        (*str) << SolArr[(int)(params[1])]->toList().c_str();
                         WxListBox1->SetString(tmpID,(*str));
                         break;
             case  9 :   tmpID = 0;
                         stmp << params[1];                        
                         while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
-                        RotateSolid(SolArr[(int)params[0]],params);
-                        (*str) << SolArr[(int)(params[0])]->toList().c_str();
+                        index = (int)params[1];
+                        RotateSolid(SolArr[index],params);
+                        (*str) << SolArr[(int)(params[1])]->toList().c_str();
                         WxListBox1->SetString(tmpID,(*str));
                         break;
             default :   rest(WxEdit1->GetLineText(0).ToStdString());
@@ -566,7 +568,7 @@ void EdytorFrm::MoveSolid(Solid* sol, double* params) {
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
-/*    Matrix macierz = rotateX(params[4])*rotateY(params[5])*rotateZ(params[6]);
+    Matrix macierz = rotateX(params[5])*rotateY(params[6])*rotateZ(params[7]);
     Vector* cvVector;
         
     for(int i = 0; i < sol->getSize();i++){
@@ -578,5 +580,5 @@ void EdytorFrm::RotateSolid(Solid* sol, double* params) {
         cvVector->setBegin(cvBegin);
         cvVector->setEnd(cvEnd);
     }
-    Repaint();*/
+    Repaint();
 }
