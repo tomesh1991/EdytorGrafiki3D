@@ -403,10 +403,12 @@ void EdytorFrm::Repaint() {
  bdc3.SetDeviceOrigin(_w3, _h3);
  bdc4.SetDeviceOrigin(_w4, _h4);
  
+ translation(50,50,50,&x,&y,&z);//x,y,z
+ 
  for(int i = 0; i < 100 ;i++){
    if(!access[i])     
     for(int j = 0; j < SolArr[i]->getSize();j++){
-        macierz = matrix(_w1, _h1)*translation(50,50,50,&x,&y,&z)*rotateX(0)*rotateY(0)*rotateZ(0)*scale(15);  
+        macierz = matrix(_w1, _h1)*rotateX(0)*rotateY(0)*rotateZ(0)*scale(15);  
         cvVector = SolArr[i]->getSingleVec(j);
         Coord cvBegin = cvVector->getBegin();
         Coord cvEnd = cvVector->getEnd(); 
@@ -433,7 +435,7 @@ void EdytorFrm::Repaint() {
         bdc1.SetPen(wxPen(RGB(r,g,b)));
         bdc1.DrawLine(x0,y0,x1,y1);
         //**************************OKNO2*************************************
-        macierz = matrix(_w2, _h2)*translation(50,50,50,&x,&y,&z)*rotateX(0)*rotateY(90)*rotateZ(0)*scale(15);
+        macierz = matrix(_w2, _h2)*rotateX(0)*rotateY(90)*rotateZ(0)*scale(15);
         cvBegin = cvVector->getBegin();
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
@@ -449,7 +451,7 @@ void EdytorFrm::Repaint() {
         bdc2.SetPen(wxPen(RGB(r,g,b)));
         bdc2.DrawLine(x0,y0,x1,y1);
         //**************************OKNO3************************************* 
-        macierz = matrix(_w3, _h3)*translation(50,50,50,&x,&y,&z)*rotateX(90)*rotateY(0)*rotateZ(0)*scale(15);
+        macierz = matrix(_w3, _h3)*rotateX(90)*rotateY(0)*rotateZ(0)*scale(15);
         cvBegin = cvVector->getBegin();
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
@@ -465,7 +467,7 @@ void EdytorFrm::Repaint() {
         bdc3.SetPen(wxPen(RGB(r,g,b)));
         bdc3.DrawLine(x0,y0,x1,y1);                
         //**************************OKNO4************************************* 
-        macierz = matrix(_w4, _h4)*translation(50,50,50,&x,&y,&z)*rotateX(0)*rotateY(-45)*rotateZ(-45)*scale(15);
+        macierz = matrix(_w4, _h4)*rotateX(0)*rotateY(-45)*rotateZ(-45)*scale(15);
         cvBegin = cvVector->getBegin();
         cvEnd = cvVector->getEnd(); 
         macierz*cvBegin;
@@ -549,9 +551,9 @@ Matrix EdytorFrm::translation(double x, double y, double z, double* _x, double* 
     macierzTranslacja.data[1][1]=1.0;
     macierzTranslacja.data[2][2]=1.0;
     
-    *_x = macierzTranslacja.data[3][0]=1.0*x;
-    *_y = macierzTranslacja.data[3][1]=1.0*y;
-    *_z = macierzTranslacja.data[3][2]=-(1.0*z-120)/60;   
+    *_x = macierzTranslacja.data[0][3]=1.0*x;
+    *_y = macierzTranslacja.data[1][3]=1.0*y;
+    *_z = macierzTranslacja.data[2][3]=-(1.0*z-120)/60;   
 
     return macierzTranslacja;
 }
@@ -568,17 +570,21 @@ void EdytorFrm::MoveSolid(Solid* sol, double* params) {
 }
 
 void EdytorFrm::RotateSolid(Solid* sol, double* params) {
-    Matrix macierz = rotateX(params[5])*rotateY(params[6])*rotateZ(params[7]);
+    double x, y, z, x0, y0, x1, y1;
     Vector* cvVector;
+    Matrix macierz;    
+    
+    macierz = translation(params[2],params[3],params[4],&x,&y,&z)*rotateX(params[5])*rotateY(params[6])*rotateZ(params[7])*translation(-params[2],-params[3],-params[4],&x,&y,&z);
         
     for(int i = 0; i < sol->getSize();i++){
         cvVector = sol->getSingleVec(i);
         Coord cvBegin = cvVector->getBegin();
         Coord cvEnd = cvVector->getEnd();
         macierz*cvBegin;
-        macierz*cvEnd;
+        macierz*cvEnd;       
         cvVector->setBegin(cvBegin);
         cvVector->setEnd(cvEnd);
     }
+    
     Repaint();
 }
