@@ -69,6 +69,7 @@ public:
         if(__splitted_str->front() == "set_line_color" || __splitted_str->front() == "set_line_colour") {
 			__result = new double[4];	
             __result[0] = 6;
+            for(int i=1;i<4;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -103,6 +104,7 @@ public:
         if(__splitted_str->front() == "delete") {
 			__result = new double[2];	
             __result[0] = 7;
+            __result[1] = 0;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -137,6 +139,7 @@ public:
         if(__splitted_str->front() == "move") {
 			__result = new double[5];	
             __result[0] = 8;
+            for(int i=1;i<5;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -171,6 +174,7 @@ public:
         if(__splitted_str->front() == "rotate") {
 			__result = new double[8];	
             __result[0] = 9;
+            for(int i=1;i<8;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -205,6 +209,7 @@ public:
         if(__splitted_str->front() == "line") {
 			__result = new double[7];	
             __result[0] = 1;
+            for(int i=1;i<7;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -239,6 +244,7 @@ public:
         if(__splitted_str->front() == "box") {
 			__result = new double[7];
             __result[0] = 2;
+            for(int i=1;i<7;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -273,6 +279,7 @@ public:
         if(__splitted_str->front() == "sphere") {
 			__result = new double[7];
             __result[0] = 3;
+            for(int i=1;i<7;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -307,6 +314,7 @@ public:
         if(__splitted_str->front() == "cone") {
 			__result = new double[10];
             __result[0] = 4;
+            for(int i=1;i<10;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
@@ -341,6 +349,7 @@ public:
         if(__splitted_str->front() == "cylinder") {
 			__result = new double[9];
             __result[0] = 5;
+            for(int i=1;i<9;++i) __result[i] = 0.;
             stringstream strm;
 			for (std::vector<std::string>::iterator it = __splitted_str->begin() ; it != __splitted_str->end(); ++it) {
 				strm << *it << ",";
