@@ -99,6 +99,7 @@ class EdytorFrm : public wxFrame
 	private:
 		void OnClose(wxCloseEvent& event);
 		void CreateGUIControls();
+		void Enter(string);
 		void MoveSolid(Solid*,double*);
     	void RotateSolid(Solid*,double*);
     	void rest(string);

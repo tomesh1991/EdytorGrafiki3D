@@ -135,39 +135,30 @@ void EdytorFrm::LoadSolid(string file_name) {
     ifstream file(file_name.c_str()); //otwieramy plik
     std::string str;
     double* param;
-    for(unsigned int i = 0; i < 100; ++i){
+    /*for(unsigned int i = 0; i < 100; ++i){
         if(SolArr[i] != NULL){
             delete SolArr[i];
             access[i] = true;
         }
-    }
+    }*/
     unsigned int array_index = 0; 
     //oczyszczamy tablicy solidow dla pewnosci
-    WxListBox1->Clear();
+    //WxListBox1->Clear();
     
     if(file){
         while(getline(file, str)){
-            std::string *st = new std::string("");
-            std::vector<string> *vect = string_splitter(str);
-            
-            wxString *s = new wxString();
-            int id = 0;
-            
-            for (std::vector<std::string>::iterator it = vect->begin()+1 ; it != vect->end(); ++it) {
-				(*st) += *it + ",";
-			}
-            Chain chain(*st);
-            param = chain.solve();
-            
-            SolArr[array_index] = fac->produce(id,__col,param);
-            access[array_index] = false;
-             
-            (*s) << SolArr[array_index]->toList().c_str();
-            WxListBox1->InsertItems(1,s,0);
-            ++array_index;
-            delete s;
-            delete st;
-            delete vect;
+            if(str != "\n") {
+                std::string *st = new std::string("");
+                std::vector<string> *vect = string_splitter(str);
+                
+                for (std::vector<std::string>::iterator it = vect->begin()+1 ; it != vect->end(); ++it) {
+    				(*st) += *it + " ";
+    			}
+                wxString s((*st));
+    			Enter((*st));
+                delete st;
+                delete vect;
+            }
         }//interpreter polecen zapisanych w pliku
     }
     file.close(); //zamykamy plik
@@ -187,7 +178,7 @@ void EdytorFrm::rest(string str) {
     Chain* tmp_chain = new Chain(str);
     if(tmp_chain->getSplStr()->front() == "save") SaveSolid(tmp_chain->getSplStr()->at(1));
     if(tmp_chain->getSplStr()->front() == "load") LoadSolid(tmp_chain->getSplStr()->at(1));
-    delete tmp_chain;    
+    delete tmp_chain;
     }
 }
 
@@ -196,87 +187,92 @@ void EdytorFrm::rest(string str) {
  */
 void EdytorFrm::WxEdit1Enter(wxCommandEvent& event)
 {
-    ch = new Chain(WxEdit1->GetLineText(0).ToStdString());
-    double* params = ch->solve();
-    int tmp_index = 0;
-    int tmpID = 0;
-    int index = 0;
-    wxString stmp;
-    while(!access[tmp_index]) tmp_index++;
-    if(tmp_index<100){
-        wxString* str = new wxString();
-        switch((int)params[0]) {
-            case  1 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
-                        if(SolArr[tmp_index]!=NULL) {
-                            (*str) << SolArr[tmp_index]->toList().c_str();
-                        	WxListBox1->InsertItems(1,str,0);
-                            access[tmp_index] = false;
-                        }
-                        break;
-            case  2 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
-                        if(SolArr[tmp_index]!=NULL) {
-                            (*str) << SolArr[tmp_index]->toList().c_str();
-                        	WxListBox1->InsertItems(1,str,0);
-                            access[tmp_index] = false;
-                        }
-                        break;
-            case  3 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
-                        if(SolArr[tmp_index]!=NULL) {
-                            (*str) << SolArr[tmp_index]->toList().c_str();
-                        	WxListBox1->InsertItems(1,str,0);
-                            access[tmp_index] = false;
-                        }
-                        break;
-            case  4 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
-                        if(SolArr[tmp_index]!=NULL) {
-                            (*str) << SolArr[tmp_index]->toList().c_str();
-                        	WxListBox1->InsertItems(1,str,0);
-                            access[tmp_index] = false;
-                        }
-                        break;
-            case  5 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
-                        if(SolArr[tmp_index]!=NULL) {
-                            (*str) << SolArr[tmp_index]->toList().c_str();
-                        	WxListBox1->InsertItems(1,str,0);
-                            access[tmp_index] = false;
-                        }
-                        break;
-            case  6 :   __col = RGBCol(params[1],params[2],params[3]);
-                        break;
-            case  7 :   while(params[1] != SolArr[tmpID]->getID()) tmpID++;
-                        delete SolArr[tmpID];
-                        access[tmpID] = true;
-                        tmpID = 0;
-                        stmp << params[1];
-                        while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
-                        WxListBox1->Delete(tmpID);
-                        break;
-            case  8 :   tmpID = 0;
-                        stmp << params[1];                        
-                        while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
-                        MoveSolid(SolArr[(int)params[1]],params);
-                        (*str) << SolArr[(int)(params[1])]->toList().c_str();
-                        WxListBox1->SetString(tmpID,(*str));
-                        break;
-            case  9 :   tmpID = 0;
-                        stmp << params[1];                        
-                        while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
-                        index = (int)params[1];
-                        RotateSolid(SolArr[index],params);
-                        (*str) << SolArr[(int)(params[1])]->toList().c_str();
-                        WxListBox1->SetString(tmpID,(*str));
-                        break;
-            default :   rest(WxEdit1->GetLineText(0).ToStdString());
-                        break;   
-        }        
-           	
-    	delete str;
+    Enter(WxEdit1->GetLineText(0).ToStdString());
+}
+
+void EdytorFrm::Enter(string str)
+{
+    if(str != "" && str != "\n") {
+        ch = new Chain(str);
+        double* params = ch->solve();
+        int tmp_index = 0;
+        int tmpID = 0;
+        int index = 0;
+        wxString stmp;
+        while(!access[tmp_index]) tmp_index++;
+        if(tmp_index<100){
+            wxString* str = new wxString();
+            switch((int)params[0]) {
+                case  1 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
+                            if(SolArr[tmp_index]!=NULL) {
+                                (*str) << SolArr[tmp_index]->toList().c_str();
+                            	WxListBox1->InsertItems(1,str,0);
+                                access[tmp_index] = false;
+                            }
+                            break;
+                case  2 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
+                            if(SolArr[tmp_index]!=NULL) {
+                                (*str) << SolArr[tmp_index]->toList().c_str();
+                            	WxListBox1->InsertItems(1,str,0);
+                                access[tmp_index] = false;
+                            }
+                            break;
+                case  3 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
+                            if(SolArr[tmp_index]!=NULL) {
+                                (*str) << SolArr[tmp_index]->toList().c_str();
+                            	WxListBox1->InsertItems(1,str,0);
+                                access[tmp_index] = false;
+                            }
+                            break;
+                case  4 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
+                            if(SolArr[tmp_index]!=NULL) {
+                                (*str) << SolArr[tmp_index]->toList().c_str();
+                            	WxListBox1->InsertItems(1,str,0);
+                                access[tmp_index] = false;
+                            }
+                            break;
+                case  5 :   SolArr[tmp_index] = fac->produce(tmp_index,__col,params);
+                            if(SolArr[tmp_index]!=NULL) {
+                                (*str) << SolArr[tmp_index]->toList().c_str();
+                            	WxListBox1->InsertItems(1,str,0);
+                                access[tmp_index] = false;
+                            }
+                            break;
+                case  6 :   __col = RGBCol(params[1],params[2],params[3]);
+                            break;
+                case  7 :   while(params[1] != SolArr[tmpID]->getID()) tmpID++;
+                            delete SolArr[tmpID];
+                            access[tmpID] = true;
+                            tmpID = 0;
+                            stmp << params[1];
+                            while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
+                            WxListBox1->Delete(tmpID);
+                            break;
+                case  8 :   tmpID = 0;
+                            stmp << params[1];                        
+                            while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
+                            MoveSolid(SolArr[(int)params[1]],params);
+                            (*str) << SolArr[(int)(params[1])]->toList().c_str();
+                            WxListBox1->SetString(tmpID,(*str));
+                            break;
+                case  9 :   tmpID = 0;
+                            stmp << params[1];                        
+                            while(WxListBox1->GetString(tmpID)[0] != stmp[0]) tmpID++;
+                            index = (int)params[1];
+                            RotateSolid(SolArr[index],params);
+                            (*str) << SolArr[(int)(params[1])]->toList().c_str();
+                            WxListBox1->SetString(tmpID,(*str));
+                            break;
+                default :   rest(WxEdit1->GetLineText(0).ToStdString());
+                            break;   
+            }        	
+        	delete str;
+        }
+    	delete [] params;
+    	WxEdit1->Clear();
+    	WxEdit1->SetFocus();
+    	Repaint(); 
     }
-	delete [] params;
-	delete ch;
-	WxEdit1->Clear();
-	WxEdit1->SetFocus();
-	Repaint();
 }
 
 void EdytorFrm::Repaint() {
