@@ -258,7 +258,7 @@ class Sphere : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " sphere " << __center.toString() << "," << __radius;
+			strm << __ID << " sphere " << __center.toString() << "," << __radius << "," << __meridian << "," << __parallel;
 			string tmp = strm.str();
 			return tmp;
 		}
@@ -349,7 +349,7 @@ class Cone : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " cone " << __lowerRadixCenter.toString() << "," << __lowerRadixRadius << "," << __upperRadixCenter.toString() << "," << __upperRadixRadius;
+			strm << __ID << " cone " << __lowerRadixCenter.toString() << "," << __lowerRadixRadius << "," << __upperRadixCenter.toString() << "," << __upperRadixRadius << "," << __lateralSurfaceDivision;
 			string tmp = strm.str();
 			return tmp;
 		}
@@ -444,7 +444,7 @@ class Cylinder : public Solid {
 		
 		string toList() {
 			stringstream strm;
-			strm << __ID << " cylinder " << __lowerRadixCenter.toString() << "," << __upperRadixCenter.toString() << "," << __radixRadius;
+			strm << __ID << " cylinder " << __lowerRadixCenter.toString() << "," << __upperRadixCenter.toString() << "," << __radixRadius  << "," << __lateralSurfaceDivision;
 			string tmp = strm.str();
 			return tmp;
 		}
